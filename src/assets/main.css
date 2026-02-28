@@ -1,0 +1,100 @@
+:root{
+  --bg: #0b0f14;
+  --panel: #0f1621;
+  --text: #e6edf3;
+  --muted: #9aa4b2;
+  --accent: #5cf2ff;
+  --accent-2: #8a7dff;
+  --glow: 0 0 24px rgba(92,242,255,.35);
+  scroll-padding-top: 84px;
+}
+
+html, body{
+    overscroll-behavior: none;
+}
+
+*{ box-sizing: border-box; }
+html,body,#app{ 
+  height:100%; }
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(92,242,255,.08), transparent 40%),
+    radial-gradient(800px 400px at 110% 10%, rgba(138,125,255,.08), transparent 40%),
+    var(--bg);
+  color: var(--text);
+}
+
+a{ color: var(--accent); text-decoration: none; }
+.container{ max-width:1100px; margin:0 auto; padding:64px 20px; }
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+.glow{ box-shadow: var(--glow); }
+.btn{
+  display:inline-flex; gap:10px; align-items:center;
+  padding:12px 18px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: linear-gradient(180deg, rgba(92,242,255,.12), rgba(92,242,255,.04));
+  color: var(--text); cursor:pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.btn:hover{ transform: translateY(-2px); box-shadow: var(--glow); border-color: rgba(92,242,255,.6); }
+.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:20px; }
+@media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+.separator{
+  height:1px;
+  margin: 24px 0;
+  background: linear-gradient(90deg, transparent, rgba(92,242,255,.6), transparent);
+  box-shadow: 0 0 12px rgba(92,242,255,.5);
+}
+
+body::after{
+  content:'';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  opacity: .25;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  .hero-full .grid,
+  .contacts-wrap,
+  .services-wrap,
+  .pricing-grid,
+  .projects-wrap,
+  .reviews-head,
+  .nav-full {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 900px){
+  .about-grid{
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Offset per anchor con header fixed */
+
+/* Mobile: header più “alto” → aumenta offset */
+@media (max-width: 900px){
+  section[id]{
+    scroll-margin-top: 40px;
+  }
+}

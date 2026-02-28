@@ -77,28 +77,28 @@ const projects = [
     title: 'Ristorboo',
     desc: 'Sito Web completo per ristorante con design accattivante e funzionalità di prenotazione.',
     tech: ['Vue', 'Laravel', 'MySQL', 'UI/UX'],
-    image: 'public/project/ristorboo.png',
+    image: '/project/RistorBoo.png',   // 🔥 attenzione maiuscole!
     link: 'https://github.com/thomassalvaterra/laravel-auth'
   },
   {
     title: 'ZampAura E-commerce',
     desc: 'Landing + Pagina prodotto per brand e-commerce. Focus su conversione e UX.',
     tech: ['Shopify', 'UX', 'Altre Librerie'],
-    image: 'public/project/ecommerce.png',
+    image: '/project/ecommerce.png',
     link: '#'
   },
   {
     title: 'Clone Discord',
     desc: 'Riproduzione semplice della homepage di Discord.',
     tech: ['HTML', 'CSS'],
-    image: 'public/project/discord.png',
+    image: '/project/discord.png',
     link: 'https://github.com/thomassalvaterra/htmlcss-discord'
   },
   {
     title: 'Sito vetrina Boolzapp',
     desc: 'Sito vetrina Whatsapp Web.',
     tech: ['HTML', 'CSS', 'JavaScript'],
-    image: 'public/project/boolzapp.png',
+    image: '/project/boolzapp.png',
     link: 'https://github.com/thomassalvaterra/vue-boolzapp'
   }
 ]

@@ -76,7 +76,7 @@
         <span class="eyebrow balloon badge-mobile">Chi sono</span>
 
         <div class="profile-card">
-          <img src="/public/Thomas.png" alt="Profilo" />
+          <img src="/Thomas.png" alt="Profilo" />
           <div class="glow"></div>
         </div>
       </div>

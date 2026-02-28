@@ -46,11 +46,11 @@ const offsetRight = ref(0)
 
 // 🔁 LOGHI
 const logos = [
-  '/src/assets/Replica.png',
-  '/src/assets/Origini.png',
-  '/src/assets/Fonzies.png',
-  '/src/assets/JD.png',
-  '/src/assets/GearXPro.png',
+  '/public/brand/Replica.png',
+  '/public/brand/Origini.png',
+  '/public/brand/Fonzies.png',
+  '/public/brand/JD.png',
+  '/public/brand/GearXPro.png',
 ]
 
 // 🖼️ IMMAGINI

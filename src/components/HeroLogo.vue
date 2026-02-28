@@ -19,7 +19,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import logo from '../assets/logo.png'
+import logo from '/public/logo.png'
 
 const done = ref(false)
 const isMobile = ref(false)

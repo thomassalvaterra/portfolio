@@ -4,7 +4,7 @@
       
       <!-- Logo -->
       <a href="#home" class="logo">
-        <img src="/src/assets/logo.png" alt="Logo" class="logo-img" />
+        <img src="/public/logo.png" alt="Logo" class="logo-img" />
       </a>
 
       <!-- Desktop menu -->

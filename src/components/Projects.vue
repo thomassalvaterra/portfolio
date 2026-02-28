@@ -84,7 +84,7 @@ const projects = [
     title: 'ZampAura E-commerce',
     desc: 'Landing + Pagina prodotto per brand e-commerce. Focus su conversione e UX.',
     tech: ['Shopify', 'UX', 'Altre Librerie'],
-    image: 'public/project/zampaura.png',
+    image: 'public/project/ecommerce.png',
     link: '#'
   },
   {

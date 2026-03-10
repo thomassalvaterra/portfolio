@@ -1,5 +1,5 @@
 <template>
-  <section id="progetti" class="projects">
+  <section id="progetti" class="projects" ref="projectsSection">
     <div class="projects-head">
       <span class="eyebrow">Progetti</span>
       <p class="glow-words">
@@ -42,12 +42,13 @@
 
     <div class="projects-archive">
       <article
-        v-for="(project, i) in projects"
+        v-for="(project, i) in (showAll ? projects : projects.slice(0,3))"
         :key="i"
         class="project"
         :class="{ in: visible[i] }"
         :ref="el => (projectEls[i] = el)"
       >
+      
         <div class="project-media">
           <img :src="project.image" :alt="project.title" />
         </div>
@@ -66,13 +67,25 @@
         </div>
       </article>
     </div>
+      <div class="projects-more" v-if="projects.length > 3">
+        <button class="btn-more" @click="toggleProjects">
+          {{ showAll ? 'Mostra meno' : 'Mostra altri progetti' }}
+        </button>
+      </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted,nextTick } from 'vue'
 
 const projects = [
+  {
+    title: 'ProjectHub',
+    desc: 'Applicazione web full-stack per la gestione dei progetti tra sviluppatore e cliente. Il sistema include autenticazione con ruoli (admin/client), dashboard progetti, caricamento file, feedback del cliente e condivisione delle consegne.',
+    tech: ['Next.js', 'Typescript', 'Tailwind', 'Supabase', 'PostgreSQL'],
+    image: '/project/ProjectHub.png',
+    link: 'https://projecthub-dfnafro00-thomassalvaterras-projects.vercel.app'
+  },
   {
     title: 'Ristorboo',
     desc: 'Sito Web completo per ristorante con design accattivante e funzionalità di prenotazione.',
@@ -105,6 +118,26 @@ const projects = [
 
 const projectEls = ref([])
 const visible = ref([])
+const projectsSection = ref(null)
+const showAll = ref(false)
+
+const toggleProjects = async () => {
+  showAll.value = !showAll.value
+
+  await nextTick()
+
+  if (showAll.value) {
+    visible.value = projects.map(() => true)
+  } else {
+    visible.value = projects.map((_, i) => i < 3)
+
+    // scrolla all'inizio della sezione
+    projectsSection.value?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    })
+  }
+}
 
 let io = null
 
@@ -370,5 +403,27 @@ onUnmounted(() => {
     0 0 18px rgba(255,255,255,.4),
     0 0 28px rgba(255,255,255,.2);
   transform: translateY(-1px);
+}
+
+.projects-more{
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.btn-more{
+  padding: 14px 26px;
+  border-radius: 12px;
+  font-weight: 900;
+  border: 1px solid rgba(255,255,255,.2);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #0b0f14;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.btn-more:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(92,242,255,.5);
 }
 </style>

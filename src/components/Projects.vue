@@ -80,6 +80,13 @@ import { ref, onMounted, onUnmounted,nextTick } from 'vue'
 
 const projects = [
   {
+    title: 'SportCity',
+    desc: 'Redesign completo del sito SportCity Mantova con un approccio moderno e orientato alla conversione. Interfaccia dinamica con animazioni 3D, navigazione intuitiva e ottimizzazione mobile-first.',
+    tech: ['Vue.js', 'Tailwind', 'gsap'],
+    image: '/project/SportCity.png',
+    link: 'https://mantova-sportcity-redesign.vercel.app/'
+  },
+  {
     title: 'ProjectHub',
     desc: 'Applicazione web full-stack per la gestione dei progetti tra sviluppatore e cliente. Il sistema include autenticazione con ruoli (admin/client), dashboard progetti, caricamento file, feedback del cliente e condivisione delle consegne.',
     tech: ['Next.js', 'Typescript', 'Tailwind', 'Supabase', 'PostgreSQL'],

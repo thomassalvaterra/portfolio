@@ -44,59 +44,94 @@
   </section>
   <section id="pacchetti" class="pricing">
   <h2 class="pricing-title muted reveal-pricing">
-    Scegli il piano giusto per il tuo progetto
+    Soluzioni moderne per valorizzare il tuo brand online
   </h2>
 
   <div class="pricing-grid">
 
+    <!-- STARTER -->
     <div class="price-card reveal-price delay-1">
       <h3>Starter</h3>
-      <p class="desc">Ideale per siti vetrina e landing page</p>
-      <p class="time">⏱ 3–5 giorni</p>
 
-      <ul class="no-list">
-        <li>✔ UI moderna</li>
-        <li>✔ 1–2 pagine</li>
-        <li>✔ Responsive</li>
-        <li>✔ Contenuti statici</li>
-      </ul>
+      <p class="desc">
+        Ideale per landing page e piccole attività che vogliono una presenza online moderna.
+      </p>
 
-      <div class="price">da 149€</div>
-      <a href="#contatti" class="cta">Contattami</a>
-    </div>
-
-    <div class="price-card featured">
-      <span class="badge">Più scelto</span>
-      <h3>Business</h3>
-      <p class="desc">Per professionisti e aziende</p>
       <p class="time">⏱ 1–2 settimane</p>
 
       <ul class="no-list">
-        <li>✔ UI/UX personalizzata</li>
-        <li>✔ Fino a 5–7 pagine</li>
-        <li>✔ Animazioni moderne</li>
-        <li>✔ Performance ottimizzate</li>
-        <li>✔ Supporto post-consegna</li>
+        <li>✔ Landing page o mini sito</li>
+        <li>✔ UI moderna responsive</li>
+        <li>✔ Vue.js oppure React</li>
+        <li>✔ Form contatti</li>
+        <li>✔ SEO base</li>
+        <li>✔ Deploy e setup hosting</li>
+        <li>✔ Animazioni leggere</li>
       </ul>
 
-      <div class="price">da 499€</div>
-      <a href="#contatti" class="cta">Contattami</a>
+      <div class="price">da 800€</div>
+
+      <a href="#contatti" class="cta">
+        Richiedi informazioni
+      </a>
     </div>
 
-    <div class="price-card">
-      <h3>Pro / Custom</h3>
-      <p class="desc">Per progetti su misura</p>
-      <p class="time">⏱ Variabile</p>
+    <!-- BUSINESS -->
+    <div class="price-card featured">
+      <span class="badge">Più richiesto</span>
+
+      <h3>Business</h3>
+
+      <p class="desc">
+        Soluzione professionale per aziende, professionisti e brand che vogliono distinguersi.
+      </p>
+
+      <p class="time">⏱ 3–6 settimane</p>
 
       <ul class="no-list">
-        <li>✔ Sviluppo personalizzato</li>
-        <li>✔ Integrazioni API</li>
-        <li>✔ Consulenza</li>
-        <li>✔ Scalabile nel tempo</li>
+        <li>✔ Design personalizzato</li>
+        <li>✔ Frontend Vue.js / React</li>
+        <li>✔ Backend Laravel o Supabase</li>
+        <li>✔ CMS custom</li>
+        <li>✔ Dashboard amministrativa</li>
+        <li>✔ SEO avanzata</li>
+        <li>✔ Animazioni premium</li>
+        <li>✔ Effetti 3D leggeri</li>
       </ul>
 
-      <div class="price">Preventivo</div>
-      <a href="#contatti" class="cta">Contattami</a>
+      <div class="price">da 1.800€</div>
+
+      <a href="#contatti" class="cta">
+        Richiedi informazioni
+      </a>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="price-card">
+      <h3>Premium / Custom</h3>
+
+      <p class="desc">
+        Esperienze web immersive e web app avanzate sviluppate completamente su misura.
+      </p>
+
+      <p class="time">⏱ 1–4 mesi</p>
+
+      <ul class="no-list">
+        <li>✔ Web app custom</li>
+        <li>✔ Autenticazione utenti</li>
+        <li>✔ API integrations</li>
+        <li>✔ Pagamenti Stripe</li>
+        <li>✔ Realtime features</li>
+        <li>✔ Esperienze 3D immersive</li>
+        <li>✔ Three.js / React Three Fiber</li>
+        <li>✔ Performance avanzate</li>
+      </ul>
+
+      <div class="price">da 4.000€</div>
+
+      <a href="#contatti" class="cta">
+        Prenota una call
+      </a>
     </div>
 
   </div>

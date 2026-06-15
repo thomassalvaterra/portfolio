@@ -79,6 +79,14 @@
 import { ref, onMounted, onUnmounted,nextTick } from 'vue'
 
 const projects = [
+
+  {
+    title: 'Studio Giorgita',
+    desc: 'Sviluppo di una piattaforma web moderna per uno studio multidisciplinare,   con focus su esperienza utente, identità visiva e conversione. Il progetto integra un sistema di prenotazione intelligente, animazioni raffinate, design responsive e performance elevate (99/100 Lighthouse).',
+    tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+    image: '/project/StudioGiorgita.png',
+    link: 'https://studiogiorgita.it/',
+  },
   {
     title: 'SportCity',
     desc: 'Redesign completo del sito SportCity Mantova con un approccio moderno e orientato alla conversione. Interfaccia dinamica con animazioni 3D, navigazione intuitiva e ottimizzazione mobile-first.',

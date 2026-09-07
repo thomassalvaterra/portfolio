@@ -81,7 +81,7 @@ import { ref, onMounted, onUnmounted,nextTick } from 'vue'
 const projects = [
   {
     title: 'Flabber Studio',
-    desc: 'Ho sviluppato un’esperienza web immersiva per **Flabber**, combinando 3D, animazioni e interazioni dinamiche.Un racconto digitale che ripercorre la vera storia del brand, presentandone identità, progetti e collaborazioni.',
+    desc: 'Ho sviluppato un’esperienza web immersiva per Flabber, combinando 3D, animazioni e interazioni dinamiche.Un racconto digitale che ripercorre la vera storia del brand, presentandone identità, progetti e collaborazioni.',
     tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'WebGL + GLSL'],
     image: '/project/Flabber.png',
     link: 'https://flabber.it/',

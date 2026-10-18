@@ -22,10 +22,11 @@
             </a>
 
             <div class="socials">
-              <a href="https://www.linkedin.com/in/thomas-salvaterra-239a05279/" target="_blank" class="social">LinkedIn</a>
-              <a href="https://www.instagram.com/thomas_salvaterra" target="_blank" class="social">Instagram</a>
-              <a href="https://www.tiktok.com/@thomas_salvaterra" target="_blank" class="social">TikTok</a>
-              <a href="https://calendly.com/thomassalvaterra2001/30min" target="_blank" class="btn-light call" @click.prevent="openCalendly = true">
+              <a href="https://www.linkedin.com/in/thomas-salvaterra-239a05279/" target="_blank" rel="noopener" class="social">LinkedIn</a>
+              <a href="https://www.instagram.com/thomas_salvaterra" target="_blank" rel="noopener" class="social">Instagram</a>
+              <a href="https://www.tiktok.com/@thomas_salvaterra" target="_blank" rel="noopener" class="social">TikTok</a>
+              <a :href="pixelai.url" target="_blank" rel="noopener" class="social pixel">PixelAi · AI</a>
+              <a href="https://calendly.com/thomassalvaterra2001/30min" target="_blank" rel="noopener" class="btn-light call" @click.prevent="openCalendly = true">
                 📅 Chiamata
               </a>
             </div>
@@ -56,6 +57,8 @@
               Invio in corso...
             </span>
           </button>
+
+          <p v-if="error" class="form-error" role="alert">{{ error }}</p>
 
           <p class="privacy">
             Nessuno spam. Ti scrivo solo per rispondere alla tua richiesta.
@@ -92,6 +95,7 @@
 <script setup>
 import { ref } from 'vue'
 import emailjs from '@emailjs/browser'
+import { pixelai } from '@/data/socials'
 
 const openCalendly = ref(false)
 
@@ -102,18 +106,20 @@ const form = ref({
 })
 
 const loading = ref(false)
+const error = ref('')
 const sent = ref(false)
 
 const submit = async () => {
   if (loading.value) return
-  loading.value = true
+  error.value = ''
 
   // ✅ Validazione base
   if (!form.value.name || !form.value.email || !form.value.message) {
-    alert('Compila tutti i campi 😉')
-    loading.value = false
+    error.value = 'Compila tutti i campi 😉'
     return
   }
+
+  loading.value = true
 
   try {
     await emailjs.send(
@@ -136,7 +142,7 @@ const submit = async () => {
 
   } catch (err) {
     console.error(err)
-    alert('Errore durante l’invio 😥')
+    error.value = 'Errore durante l’invio 😥 Riprova o scrivimi direttamente via email.'
   } finally {
     loading.value = false
   }
@@ -254,6 +260,11 @@ const submit = async () => {
   transform: translateY(-2px);
 }
 
+.social.pixel{
+  border-color: rgba(130,140,255,.5);
+  background: linear-gradient(100deg, rgba(123,61,255,.25), rgba(0,180,255,.2));
+}
+
 .call{ padding: 10px 18px; font-size: 14px; }
 
 /* Form */
@@ -339,6 +350,16 @@ textarea:not(:placeholder-shown) + label{
   animation: spin .8s linear infinite;
 }
 @keyframes spin{ to{ transform: rotate(360deg); } }
+
+.form-error{
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #ffd9d0;
+  background: rgba(220,80,60,.18);
+  border: 1px solid rgba(255,140,120,.3);
+}
 
 .privacy{
   margin-top: 14px;

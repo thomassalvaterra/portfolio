@@ -62,7 +62,7 @@
       <div v-reveal="150" class="about-visual">
         <div v-tilt="12" class="profile-card">
           <div class="halo"></div>
-          <img src="/Thomas.png" alt="Profilo" />
+          <img src="/Thomas.webp" alt="Profilo" />
           <div class="badge glass float-a">
             <strong>Dal 2023</strong>
             <span>sviluppo web</span>

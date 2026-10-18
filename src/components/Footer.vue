@@ -19,9 +19,10 @@
       <div class="footer-socials">
         <strong>Contatti</strong>
         <a href="mailto:thomassalvaterra2001@gmail.com">📩 Email</a>
-        <a href="https://www.linkedin.com/in/thomas-salvaterra-239a05279/" target="_blank">LinkedIn</a>
-        <a href="https://www.instagram.com/thomas_salvaterra" target="_blank">Instagram</a>
-        <a href="https://www.tiktok.com/@thomas_salvaterra" target="_blank">TikTok</a>
+        <a href="https://www.linkedin.com/in/thomas-salvaterra-239a05279/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/thomas_salvaterra" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.tiktok.com/@thomas_salvaterra" target="_blank" rel="noopener">TikTok</a>
+        <a :href="pixelai.url" target="_blank" rel="noopener" class="pixel-link">PixelAi <span>· AI</span></a>
       </div>
     </div>
 
@@ -43,6 +44,7 @@
 </template>
 
 <script setup>
+import { pixelai } from '@/data/socials'
 const year = new Date().getFullYear()
 </script>
 
@@ -103,6 +105,8 @@ const year = new Date().getFullYear()
   transform: translateX(6px);
 }
 
+.pixel-link span{ color: #8fa8ff; }
+
 .footer-name{
   margin: 90px 0 10px;
   padding: 0 24px;
@@ -154,7 +158,9 @@ const year = new Date().getFullYear()
     gap: 36px;
   }
   .footer-brand{ grid-column: 1 / -1; }
-  .footer-name{ margin-top: 50px; font-size: 15vw; }
+  .pixel-link span{ color: #8fa8ff; }
+
+.footer-name{ margin-top: 50px; font-size: 15vw; }
   .footer-name span span{ animation: letterFloat 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * .12s); }
   .footer-bottom{
     flex-direction: column;

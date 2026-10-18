@@ -161,7 +161,7 @@ onUnmounted(() => {
 .word{
   opacity: 0;
   animation: rise 1.1s var(--ease) both;
-  animation-delay: calc(1300ms + var(--d, 0ms));
+  animation-delay: calc(var(--intro-delay, 1300ms) + var(--d, 0ms));
 }
 
 @keyframes rise{

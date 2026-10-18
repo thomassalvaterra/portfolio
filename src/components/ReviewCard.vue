@@ -1,7 +1,7 @@
 <template>
   <article v-if="r" class="review-card">
     <div class="head">
-      <img :src="r.avatar" :alt="r.name" />
+      <span class="avatar" :style="{ background: tone }">{{ initials }}</span>
       <div class="meta">
         <strong>{{ r.name }}</strong>
         <span>{{ r.role }}</span>
@@ -14,11 +14,24 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   r: {
     type: Object,
     required: true
   }
+})
+
+// iniziali al posto delle foto esterne: niente richieste a servizi terzi
+const initials = computed(() =>
+  props.r.name.split(' ').map((p) => p[0]).join('').replace(/[^A-Za-zÀ-ÿ]/g, '').slice(0, 2).toUpperCase()
+)
+
+const tones = ['#2f5d3d', '#4b7a55', '#6f9e7d', '#7a8f4e', '#3e6b62']
+const tone = computed(() => {
+  const h = [...props.r.name].reduce((a, c) => a + c.charCodeAt(0), 0)
+  return tones[h % tones.length]
 })
 </script>
 
@@ -49,11 +62,16 @@ defineProps({
   gap: 12px;
 }
 
-.head img{
+.avatar{
   width: 44px;
   height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  object-fit: cover;
+  color: #f4f1e6;
+  font-size: 15px;
+  font-weight: 500;
   box-shadow: 0 0 0 3px #fff, 0 6px 14px -6px rgba(31,58,39,.5);
 }
 
@@ -92,6 +110,7 @@ defineProps({
     border-radius: 20px;
   }
   .review-card:hover{ transform: none; }
+  .avatar{ width: 38px; height: 38px; font-size: 13px; }
   .text{
     font-size: 14px;
     -webkit-line-clamp: 3;

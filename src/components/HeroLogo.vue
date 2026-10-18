@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-logo" :class="{ hide: done }">
+  <div v-if="show" class="hero-logo" :class="{ hide: done }">
     <div class="intro-wrap">
       <img :src="logo" class="hero-logo-img" alt="Logo" />
       <h2 class="intro-text">
@@ -11,15 +11,30 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import logo from '/logo.png'
+import logo from '/logo-sm.webp'
 
 const done = ref(false)
 const words = ['Benvenuto', 'nel', 'mio', 'Portfolio']
 
+// l'intro si vede solo alla prima visita della sessione
+let seen = false
+try {
+  seen = sessionStorage.getItem('intro-seen') === '1'
+  sessionStorage.setItem('intro-seen', '1')
+} catch {}
+
+const show = ref(!seen)
+if (seen) document.documentElement.style.setProperty('--intro-delay', '0ms')
+
 onMounted(() => {
+  if (!show.value) return
   setTimeout(() => {
     done.value = true
   }, 1300)
+  // rimuove l'overlay dal DOM a transizione finita
+  setTimeout(() => {
+    show.value = false
+  }, 2600)
 })
 </script>
 

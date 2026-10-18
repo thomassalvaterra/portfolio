@@ -16,7 +16,7 @@
           class="project"
           :class="{ flip: i % 2 === 1 }"
         >
-          <a v-tilt="7" :href="project.link" target="_blank" class="media">
+          <a v-tilt="7" :href="project.link" target="_blank" rel="noopener" class="media">
             <img :src="project.image" :alt="project.title" loading="lazy" />
             <span class="open">Apri ↗</span>
           </a>
@@ -30,7 +30,7 @@
               <span v-for="tag in project.tech" :key="tag">{{ tag }}</span>
             </div>
 
-            <a :href="project.link" target="_blank" class="btn-dark">Apri progetto →</a>
+            <a :href="project.link" target="_blank" rel="noopener" class="btn-dark">Apri progetto →</a>
           </div>
         </article>
       </div>
@@ -61,49 +61,49 @@ const projects = [
     title: 'Studio Giorgita',
     desc: 'Sviluppo di una piattaforma web moderna per uno studio multidisciplinare, con focus su esperienza utente, identità visiva e conversione. Il progetto integra un sistema di prenotazione intelligente, animazioni raffinate, design responsive e performance elevate (99/100 Lighthouse).',
     tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
-    image: '/project/StudioGiorgita.png',
+    image: '/project/StudioGiorgita.webp',
     link: 'https://studiogiorgita.it/'
   },
   {
     title: 'SportCity',
     desc: 'Redesign completo del sito SportCity Mantova con un approccio moderno e orientato alla conversione. Interfaccia dinamica con animazioni 3D, navigazione intuitiva e ottimizzazione mobile-first.',
     tech: ['Vue.js', 'Tailwind', 'gsap'],
-    image: '/project/SportCity.png',
+    image: '/project/SportCity.webp',
     link: 'https://mantova-sportcity-redesign.vercel.app/'
   },
   {
     title: 'ProjectHub',
     desc: 'Applicazione web full-stack per la gestione dei progetti tra sviluppatore e cliente. Il sistema include autenticazione con ruoli (admin/client), dashboard progetti, caricamento file, feedback del cliente e condivisione delle consegne.',
     tech: ['Next.js', 'Typescript', 'Tailwind', 'Supabase', 'PostgreSQL'],
-    image: '/project/ProjectHub.png',
+    image: '/project/ProjectHub.webp',
     link: 'https://projecthub-dfnafro00-thomassalvaterras-projects.vercel.app'
   },
   {
     title: 'Ristorboo',
     desc: 'Sito Web completo per ristorante con design accattivante e funzionalità di prenotazione.',
     tech: ['Vue', 'Laravel', 'MySQL', 'UI/UX'],
-    image: '/project/RistorBoo.png',
+    image: '/project/RistorBoo.webp',
     link: 'https://github.com/thomassalvaterra/laravel-auth'
   },
   {
     title: 'ZampAura E-commerce',
     desc: 'Landing + Pagina prodotto per brand e-commerce. Focus su conversione e UX.',
     tech: ['Shopify', 'UX', 'Altre Librerie'],
-    image: '/project/ecommerce.png',
+    image: '/project/ecommerce.webp',
     link: '#'
   },
   {
     title: 'Clone Discord',
     desc: 'Riproduzione semplice della homepage di Discord.',
     tech: ['HTML', 'CSS'],
-    image: '/project/discord.png',
+    image: '/project/discord.webp',
     link: 'https://github.com/thomassalvaterra/htmlcss-discord'
   },
   {
     title: 'Sito vetrina Boolzapp',
     desc: 'Sito vetrina Whatsapp Web.',
     tech: ['HTML', 'CSS', 'JavaScript'],
-    image: '/project/boolzapp.png',
+    image: '/project/boolzapp.webp',
     link: 'https://github.com/thomassalvaterra/vue-boolzapp'
   }
 ]

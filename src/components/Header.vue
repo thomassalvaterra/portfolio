@@ -3,7 +3,7 @@
     <div class="nav">
       <!-- Logo -->
       <a href="#home" class="logo">
-        <img src="/logo.png" alt="Logo" class="logo-img" />
+        <img src="/logo-sm.webp" alt="Logo" class="logo-img" />
         <span class="logo-name">Thomas Salvaterra<sup>™</sup></span>
       </a>
 
@@ -17,7 +17,7 @@
       </nav>
 
       <div class="side desktop-menu">
-        <a href="https://www.linkedin.com/in/thomas-salvaterra-239a05279/" target="_blank">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/thomas-salvaterra-239a05279/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="mailto:thomassalvaterra2001@gmail.com" class="mail">
           <span class="ico">↗</span> Scrivimi
         </a>

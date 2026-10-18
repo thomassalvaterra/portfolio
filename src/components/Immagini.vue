@@ -34,22 +34,22 @@ const offsetLeft = ref(0)
 const offsetRight = ref(0)
 
 const logos = [
-  '/brand/Replica.png',
-  '/brand/Origini.png',
-  '/brand/Fonzies.png',
-  '/brand/JD.png',
-  '/brand/GearXPro.png'
+  '/brand/Replica.webp',
+  '/brand/Origini.webp',
+  '/brand/Fonzies.webp',
+  '/brand/JD.webp',
+  '/brand/GearXPro.webp'
 ]
 
 // le immagini stanno in /public/work
 const images = [
-  '/work/Develop.jpg',
-  '/work/Hello.jpeg',
-  '/work/Keyboard.jpg',
-  '/work/Nature.jpg',
-  '/work/Overview.png',
-  '/work/Pc.jpg',
-  '/work/Web.jpeg'
+  '/work/Develop.webp',
+  '/work/Hello.webp',
+  '/work/Keyboard.webp',
+  '/work/Nature.webp',
+  '/work/Overview.webp',
+  '/work/Pc.webp',
+  '/work/Web.webp'
 ]
 
 const imagesTop = [...images, ...images, ...images]

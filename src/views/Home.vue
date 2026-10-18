@@ -7,6 +7,7 @@
   <Services />
   <Projects />
   <Review />
+  <PixelAi />
   <Contact />
   <Footer />
 </template>
@@ -21,5 +22,6 @@ import Contact from '@/components/Contact.vue'
 import Header from '@/components/Header.vue'
 import About from '@/components/About.vue'
 import Review from '@/components/Review.vue'
+import PixelAi from '@/components/PixelAi.vue'
 import Footer from '@/components/Footer.vue'
 </script>

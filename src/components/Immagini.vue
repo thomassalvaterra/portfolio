@@ -1,37 +1,26 @@
 <template>
   <section ref="wrap" class="marquee">
+    <p class="trusted">Hanno lavorato con me</p>
+
     <!-- Riga loghi (auto loop) -->
     <div class="track logos">
       <div class="row auto">
-        <img
-          v-for="(logo, i) in logos"
-          :key="'logo-'+i"
-          :src="logo"
-          class="logo"
-          alt="Brand logo"
-        />
-        <!-- duplica per loop infinito -->
-        <img
-          v-for="(logo, i) in logos"
-          :key="'logo-dup-'+i"
-          :src="logo"
-          class="logo"
-          alt="Brand logo"
-        />
+        <img v-for="(logo, i) in [...logos, ...logos]" :key="'logo-' + i" :src="logo" class="logo" alt="Brand logo" />
       </div>
     </div>
 
-    <!-- Riga immagini (scroll sync) -->
-    <div class="track left">
-      <div class="row" :style="{ transform: `translateX(${offsetLeft}px)` }">
-        <img v-for="(img, i) in imagesTop" :key="'l'+i" :src="img" />
+    <!-- Righe immagini con prospettiva 3D, legate allo scroll -->
+    <div class="stage">
+      <div class="track left">
+        <div class="row" :style="{ transform: `translate3d(${offsetLeft}px,0,0)` }">
+          <img v-for="(img, i) in imagesTop" :key="'l' + i" :src="img" alt="" loading="lazy" />
+        </div>
       </div>
-    </div>
 
-    <!-- Riga immagini (scroll sync opposta) -->
-    <div class="track right">
-      <div class="row" :style="{ transform: `translateX(${offsetRight}px)` }">
-        <img v-for="(img, i) in imagesBottom" :key="'r'+i" :src="img" />
+      <div class="track right">
+        <div class="row" :style="{ transform: `translate3d(${offsetRight}px,0,0)` }">
+          <img v-for="(img, i) in imagesBottom" :key="'r' + i" :src="img" alt="" loading="lazy" />
+        </div>
       </div>
     </div>
   </section>
@@ -44,37 +33,37 @@ const wrap = ref(null)
 const offsetLeft = ref(0)
 const offsetRight = ref(0)
 
-// 🔁 LOGHI
 const logos = [
   '/brand/Replica.png',
   '/brand/Origini.png',
   '/brand/Fonzies.png',
   '/brand/JD.png',
-  '/brand/GearXPro.png',
+  '/brand/GearXPro.png'
 ]
 
-// 🖼️ IMMAGINI
-const modules = import.meta.glob('/src/assets/work/*.{jpg,png,webp,JPG,PNG,WEBP}', { eager: true })
-const images = Object.values(modules).map(m => m.default)
+// le immagini stanno in /public/work
+const images = [
+  '/work/Develop.jpg',
+  '/work/Hello.jpeg',
+  '/work/Keyboard.jpg',
+  '/work/Nature.jpg',
+  '/work/Overview.png',
+  '/work/Pc.jpg',
+  '/work/Web.jpeg'
+]
 
-// Duplica per riempire sempre la riga (niente buchi)
 const imagesTop = [...images, ...images, ...images]
-const imagesBottom = [...images, ...images, ...images]
+const imagesBottom = [...images.slice().reverse(), ...images, ...images]
 
-// BASE iniziale (più alto = meno rischio di buchi)
 const BASE = 800
 const MAX_MOVE = 520
 
 const update = () => {
   if (!wrap.value) return
-
   const rect = wrap.value.getBoundingClientRect()
-  const vh = window.innerHeight || document.documentElement.clientHeight
-
-  // progress normalizzato 0 → 1
+  const vh = window.innerHeight
   const progress = 1 - Math.min(Math.max(rect.top / vh, 0), 1)
-
-  offsetLeft.value  = -BASE - progress * MAX_MOVE
+  offsetLeft.value = -BASE - progress * MAX_MOVE
   offsetRight.value = -BASE + progress * MAX_MOVE
 }
 
@@ -101,100 +90,98 @@ onUnmounted(() => {
 
 <style scoped>
 .marquee{
-  --gap: 6px;
-  padding: 34px 0 96px;
+  padding: 40px 0 120px;
   overflow: hidden;
-  width: 100%;
-  margin-left: calc(50% - 50vw);  /* full-bleed */
 }
 
-/* Track generica */
+.trusted{
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
 .track{
   position: relative;
   overflow: hidden;
-  margin-bottom: 8px;
 }
 
-/* Riga */
+.track.logos{
+  margin-bottom: 70px;
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+}
+
 .row{
   display: flex;
-  gap: var(--gap);
+  gap: 14px;
   width: max-content;
-  transition: transform .08s linear; /* smoothing scroll-sync */
-  margin: 0;
-  .row{
   will-change: transform;
-  transform: translateZ(0);
-}
-
-/* Mobile: togli smoothing che "ammazza" il movimento */
-@media (max-width: 900px){
-  .row{
-    transition: none;
-  }
-}
-}
-
-/* --- RIGA LOGHI (auto) --- */
-.track.logos{
-  margin-bottom: 32px;
 }
 
 .row.auto{
-  animation: logosScroll 28s linear infinite;
+  gap: 70px;
+  align-items: center;
+  animation: logosScroll 30s linear infinite;
 }
 
 @keyframes logosScroll{
   from{ transform: translateX(0); }
-  to{ transform: translateX(-50%); }  /* loop continuo */
+  to{ transform: translateX(-50%); }
 }
 
+/* i loghi hanno sfondi chiari: multiply li fonde con la crema */
 .logo{
-  height: 36px;
+  height: 64px;
   width: auto;
-  opacity: .9;
-  filter: grayscale(1) brightness(1.1);
-  transition: opacity .2s ease, filter .2s ease, transform .2s ease;
+  mix-blend-mode: multiply;
+  filter: grayscale(1) contrast(1.2);
+  opacity: .7;
+  transition: opacity .3s ease, filter .3s ease, transform .3s ease;
 }
-
 .logo:hover{
   opacity: 1;
-  filter: grayscale(0) brightness(1);
-  transform: scale(1.05);
+  filter: grayscale(0);
+  transform: scale(1.06);
 }
 
-/* --- RIGHE IMMAGINI (scroll-sync) --- */
-.track img{
-  width:350px;
-  height: 270px;
+/* Prospettiva: le righe sono leggermente inclinate verso lo spettatore */
+.stage{
+  perspective: 1400px;
+}
+
+.stage .track{
+  transform: rotateX(12deg) rotateZ(-2deg) scale(1.08);
+  transform-origin: 50% 50%;
+  margin-bottom: 14px;
+}
+
+.stage .track.right{
+  transform: rotateX(12deg) rotateZ(-2deg) scale(1.08) translateX(-60px);
+}
+
+.stage img{
+  width: 360px;
+  height: 250px;
   object-fit: cover;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 20px 60px rgba(0,0,0,.45);
-  transition: transform .3s ease;
+  border-radius: 20px;
+  box-shadow: 0 30px 50px -28px rgba(31,58,39,.55);
+  transition: transform .5s var(--ease), filter .5s ease;
+  filter: saturate(.85) sepia(.08);
 }
 
-.track img:hover{
-  transform: scale(1.03);
+.stage img:hover{
+  transform: translateY(-6px) scale(1.03);
+  filter: none;
 }
 
-/* Responsive */
 @media (max-width: 900px){
-  .track img{ width: 260px; height: 180px; }
-  .logo{ height: 28px; }
-  @media (max-width: 900px){
-  /* Nasconde le 2 righe che si muovono con lo scroll */
-  .track.left,
-  .track.right{
-    display: none;
-  }
-
-  /* Un po’ di respiro sopra/sotto ai loghi */
-  .track.logos{
-    margin-bottom: -90px;
-  }
+  .marquee{ padding: 10px 0 60px; }
+  .track.logos{ margin-bottom: 30px; }
+  .logo{ height: 48px; }
+  .row.auto{ gap: 40px; }
+  .stage{ display: none; }
 }
-}
-
-
 </style>

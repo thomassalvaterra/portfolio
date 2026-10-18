@@ -1,83 +1,76 @@
 <template>
   <section id="chi-sono" class="about">
-    <div class="about-grid">
+    <div class="wrap about-grid">
       <!-- Testo -->
-      <div ref="left" class="about-text reveal">
-        <span class="eyebrow balloon">Chi sono</span>
-        <h2>Sviluppatore Frontend orientato all’impatto</h2>
-        <p>
-             Ciao! Mi chiamo Thomas Salvaterra e sono uno sviluppatore frontend freelance.
+      <div v-reveal class="about-text">
+        <span class="eyebrow">Chi sono</span>
+        <h2 class="section-title">
+          Sviluppatore Frontend <span class="soft">orientato all’impatto</span>
+        </h2>
+        <p class="lead">
+          Ciao! Mi chiamo Thomas Salvaterra e sono uno sviluppatore frontend freelance.
           Amo sviluppare siti web: per me non è solo lavoro, è divertimento. Mi piace costruirli nel modo migliore e più funzionale possibile, pensando sempre a chi li userà davvero.
         </p>
 
-        <div class="divider"></div>
+        <div class="tabs" role="tablist">
+          <span class="tab-bg" :style="{ transform: tab === 'skills' ? 'translateX(0)' : 'translateX(100%)' }"></span>
+          <button :class="{ active: tab === 'skills' }" @click="tab = 'skills'">Skills</button>
+          <button :class="{ active: tab === 'esperienze' }" @click="tab = 'esperienze'">Esperienze</button>
+        </div>
 
-       <div class="tabs">
-  <button :class="{ active: tab === 'skills' }" @click="tab = 'skills'">Skills</button>
-  <button :class="{ active: tab === 'esperienze' }" @click="tab = 'esperienze'">Esperienze</button>
-</div>
+        <div class="panel glass">
+          <transition name="swap" mode="out-in">
+            <div v-if="tab === 'skills'" :key="'s' + currentSkill" class="content">
+              <div class="row-head">
+                <h4>{{ skills[currentSkill].title }}</h4>
+                <small>{{ skills[currentSkill].date }}</small>
+              </div>
 
-<div class="timeline">
-  <div v-if="tab === 'skills'" class="timeline-list">
+              <div class="chips">
+                <span v-for="(chip, i) in skills[currentSkill].items" :key="chip" class="chip" :style="{ animationDelay: `${i * 40}ms` }">
+                  {{ chip }}
+                </span>
+              </div>
 
-  <div class="item">
-    <div class="rail">
-      <span class="dot"></span>
-      <span class="line"></span>
-    </div>
+              <div class="foot">
+                <span class="dots">
+                  <i v-for="(s, i) in skills" :key="i" :class="{ on: i === currentSkill }"></i>
+                </span>
+                <button class="btn-ghost more" @click="nextSkill">Scopri di più <span class="arrow">→</span></button>
+              </div>
+            </div>
 
-    <div class="content">
-      <h4>{{ skills[currentSkill].title }}</h4>
-      <small>{{ skills[currentSkill].date }}</small>
+            <div v-else :key="'e' + currentExp" class="content">
+              <div class="row-head">
+                <h4>{{ experiences[currentExp].title }}</h4>
+                <small>{{ experiences[currentExp].date }}</small>
+              </div>
+              <p>{{ experiences[currentExp].desc }}</p>
 
-      <div class="chips">
-        <span
-          v-for="(chip, i) in skills[currentSkill].items"
-          :key="i"
-          class="chip"
-        >
-          {{ chip }}
-        </span>
-      </div>
-
-      <button class="more-btn" @click="nextSkill">
-        Scopri di più →
-      </button>
-    </div>
-  </div>
-
-</div>
-
-  <div v-else class="timeline-list">
-
-    <div class="item">
-      <div class="rail">
-        <span class="dot"></span>
-        <span class="line"></span>
-      </div>
-
-      <div class="content">
-        <h4>{{ experiences[currentExp].title }}</h4>
-        <small>{{ experiences[currentExp].date }}</small>
-        <p>{{ experiences[currentExp].desc }}</p>
-
-        <button class="more-btn" @click="nextExperience">
-          Scopri di più →
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
+              <div class="foot">
+                <span class="dots">
+                  <i v-for="(s, i) in experiences" :key="i" :class="{ on: i === currentExp }"></i>
+                </span>
+                <button class="btn-ghost more" @click="nextExperience">Scopri di più <span class="arrow">→</span></button>
+              </div>
+            </div>
+          </transition>
+        </div>
       </div>
 
       <!-- Visual -->
-      <div ref="right" class="about-visual reveal">
-        <span class="eyebrow balloon badge-mobile">Chi sono</span>
-
-        <div class="profile-card">
+      <div v-reveal="150" class="about-visual">
+        <div v-tilt="12" class="profile-card">
+          <div class="halo"></div>
           <img src="/Thomas.png" alt="Profilo" />
-          <div class="glow"></div>
+          <div class="badge glass float-a">
+            <strong>Dal 2023</strong>
+            <span>sviluppo web</span>
+          </div>
+          <div class="badge glass float-b">
+            <span class="ping"></span>
+            Disponibile per progetti
+          </div>
         </div>
       </div>
     </div>
@@ -85,73 +78,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
-const left = ref(null)
-const right = ref(null)
 const tab = ref('skills')
 const currentSkill = ref(0)
+const currentExp = ref(0)
 
 const skills = [
   {
     title: 'Frontend',
     date: 'Dal 2023',
-    items: [
-      'HTML',
-      'CSS',
-      'JavaScript',
-      'Vue 3 (Composition API)',
-      'Bootstrap',
-      'Tailwind',
-      'Git',
-      'Figma'
-    ]
+    items: ['HTML', 'CSS', 'JavaScript', 'Vue 3 (Composition API)', 'Bootstrap', 'Tailwind', 'Git', 'Figma']
   },
   {
     title: 'Backend',
     date: 'Dal 2023',
-    items: [
-      'PHP',
-      'MySQL',
-      'jQuery',
-      'Laravel',
-      'SQL Server',
-      'C#'
-    ]
+    items: ['PHP', 'MySQL', 'jQuery', 'Laravel', 'SQL Server', 'C#']
   }
 ]
-
-const nextSkill = () => {
-  currentSkill.value = (currentSkill.value + 1) % skills.length
-}
-
-const isMobile = window.innerWidth < 900
-
-const onScroll = () => {
-  const reveal = (el) => {
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const vh = window.innerHeight
-
-    if (isMobile || rect.top < vh * 0.85) {
-      el.classList.add('in')
-    }
-  }
-
-  reveal(left.value)
-  reveal(right.value)
-}
-
-onMounted(() => {
-  onScroll()
-  window.addEventListener('scroll', onScroll, { passive: true })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', onScroll)
-})
-
-const currentExp = ref(0)
 
 const experiences = [
   {
@@ -171,420 +115,244 @@ const experiences = [
   }
 ]
 
+const nextSkill = () => {
+  currentSkill.value = (currentSkill.value + 1) % skills.length
+}
+
 const nextExperience = () => {
   currentExp.value = (currentExp.value + 1) % experiences.length
 }
 </script>
 
 <style scoped>
-
 .about{
-  padding: 140px 0;
-  overflow-x: visible;
+  padding: 120px 0 140px;
 }
 
 .about-grid{
-  max-width: 1480px;
-  margin: 0 auto;
-  padding: 0 60px;
   display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: 64px;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 80px;
   align-items: center;
-  overflow-x: visible
-  ;
 }
 
-/* Testo */
-
-.balloon{
-  font-weight: 900;
-  letter-spacing: .12em;
-  padding: 6px 14px;
-  border-radius: 999px;             /* effetto palloncino */
-  background:
-    radial-gradient(120% 120% at 30% 30%, rgba(255,255,255,.25), rgba(255,255,255,.05)),
-    linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #0b0f14;
-  box-shadow:
-    0 6px 18px rgba(0,0,0,.25),
-    inset 0 1px 1px rgba(255,255,255,.5),
-    0 0 24px rgba(92,242,255,.35);
-  text-transform: uppercase;
-  font-size: 12px;
-}
-.eyebrow{
-  text-transform: uppercase;
-  letter-spacing: .18em;
-  font-size: 12px;
-  opacity: .7;
-  margin-bottom: 40px;
-}
-
-.about-text h2{
-  font-size: clamp(36px, 5vw, 56px);
-  line-height: 1.05;
-  margin: 14px 0 42px;
-}
-
-.about-text p{
-  color: var(--muted);
-  max-width: 56ch;
-  margin-bottom: 42px;
-}
-
-.about-text .divider{
-  width: 180px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(92,242,255,.6), transparent);
-  margin: 28px 0 34px;
-}
-
-.bullets{
-  margin-top: 26px;
-  display: grid;
-  gap: 14px;
-  font-weight: 600;
-}
-
-/* Visual */
-.profile-card{
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,.12);
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  box-shadow: 0 30px 80px rgba(0,0,0,.55);
-}
-
-.profile-card img{
-  width: 100%;
-  height: 520px;
-  object-fit: cover;
-  display: block;
-  filter: contrast(1.05) saturate(1.05);
-}
-
-.profile-card .glow{
-  position:absolute;
-  inset:-40px;
-  background:
-    radial-gradient(420px 240px at 20% 20%, rgba(59,130,246,.28), transparent 60%),
-    radial-gradient(420px 260px at 60% 70%, rgba(16,185,129,.22), transparent 65%);
-  filter: blur(36px);
-  z-index:-1;
-}
-
-/* Reveal */
-.reveal{
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity .6s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1);
-}
-.reveal.in{
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (max-width: 900px){
-  .about-grid{
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  .about-visual{
-    order: 1;
-    display: flex;
-    justify-content: center;
-  }
-  .profile-card{
-    max-width: 320px;
-    margin: 0 auto;
-  }
-  .profile-card img{ 
-    height: 370px; 
-  }
-  .about{
-    padding: 90px 0;
-  }
-  .about-text h2{
-    font-size: 32px;
-  }
-  .about-text{
-    order: 2;
-    text-align: center;
-  }
-  @media (max-width: 900px){
-  .about-text h2,
-  .about-text p,
-  .about-text .divider{
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
-
-  .about-text p{
-    max-width: 100%;
-  }
-
-  .about-text .divider{
-    margin: 24px auto 28px;
-  }
-
-  .tabs{
-    justify-content: center;
-  }
-
-  .timeline-list{
-    text-align: left; /* il contenuto resta leggibile */
-  }
-}
+.about-text .section-title{
+  margin: 22px 0 26px;
 }
 
 .tabs{
-  display: flex;
-  gap: 18px;
-  margin: 22px 0;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 38px 0 18px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(31,58,39,.06);
+  border: 1px solid var(--line);
+}
+
+.tab-bg{
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  width: calc(50% - 5px);
+  border-radius: 999px;
+  background: var(--dark-btn);
+  transition: transform .5s var(--ease);
 }
 
 .tabs button{
+  position: relative;
+  z-index: 1;
+  border: 0;
   background: none;
-  border: none;
+  padding: 9px 26px;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--muted);
-  font-weight: 700;
   cursor: pointer;
-  font-size: 16px;
-  position: relative;
-  margin-bottom: 20px;
+  transition: color .3s ease;
 }
+.tabs button.active{ color: #f4f1e6; }
 
-.tabs button.active{
-  color: white;
-}
-
-.tabs button.active::after{
-  content:'';
-  position:absolute;
-  left:0;
-  bottom:-6px;
-  width:100%;
-  height:2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  border-radius: 999px;
-}
-
-.timeline-list{
-  display: grid;
-  gap: 26px;
-}
-
-.item{
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  gap: 18px;
-  align-items: start; /* base */
-}
-
-.rail{
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.dot{
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  box-shadow: 0 0 12px rgba(92,242,255,.6);
-  z-index: 2;
-}
-
-.line{
-  position: absolute;
-  top: 14px;
-  width: 2px;
-  height: calc(100% + 12px);
-  background: linear-gradient(180deg, rgba(255,255,255,.25), transparent);
-}
-
-.item:last-child .line{
-  display:none;
+.panel{
+  padding: 26px 28px;
+  min-height: 210px;
 }
 
 .content{
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: -2px; /* 🔥 micro correzione verticale */
+  gap: 12px;
 }
 
-.content h4{
-  font-size: 18px;
-  line-height: 1;
-  margin: 0;
+.row-head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-
-.content small{
-  color: var(--muted);
+.row-head h4{
+  font-size: 22px;
+  color: var(--forest);
+}
+.row-head small{
   font-size: 13px;
+  color: var(--muted);
 }
 
 .content p{
-  font-size: 15px;
   color: var(--muted);
-}
-
-.timeline::before{
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(92,242,255,.6),
-    transparent
-  );
-}
-
-.skills-list{
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0;
-  display: grid;
-  gap: 10px;
-}
-
-.skills-list li{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* Pill stile “badge tech” */
-.pill{
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: .3px;
-  color: white;
-  background: linear-gradient(135deg, rgba(92,242,255,.22), rgba(138,125,255,.22));
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 
-    0 0 0 1px rgba(92,242,255,.25) inset,
-    0 0 16px rgba(92,242,255,.25);
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-  backdrop-filter: blur(6px);
-}
-
-.pill:hover{
-  transform: translateY(-2px) scale(1.03);
-  box-shadow:
-    0 0 0 1px rgba(92,242,255,.4) inset,
-    0 0 26px rgba(92,242,255,.55);
-  filter: brightness(1.1);
-}
-
-.exp-list{
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 8px;
-}
-
-.exp-list li{
-  position: relative;
-  padding-left: 18px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.exp-list li::before{
-  content: '✦';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--accent);
-  text-shadow: 0 0 10px rgba(92,242,255,.6);
-}
-
-.more-btn{
-  margin-top: 12px;
-  align-self: flex-start;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  border: none;
-  color: #0b0f14;
-  font-weight: 800;
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-  box-shadow: 0 6px 18px rgba(92,242,255,.35);
-}
-
-.more-btn:hover{
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-  box-shadow: 0 10px 28px rgba(92,242,255,.5);
+  max-width: 52ch;
 }
 
 .chips{
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 12px 0 6px;
 }
-
 .chip{
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 999px;
-  font-size: 13px;
-  font-weight: 700;
-  background:
-    radial-gradient(120% 120% at 30% 30%, rgba(255,255,255,.18), rgba(255,255,255,.04)),
-    linear-gradient(90deg, rgba(92,242,255,.25), rgba(138,125,255,.25));
-  border: 1px solid rgba(255,255,255,.14);
-  color: #e6f7f2;
-  box-shadow: 0 4px 14px rgba(92,242,255,.25);
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--forest);
+  animation: chipIn .5s var(--ease) both;
+  transition: transform .3s var(--ease), background .3s ease, color .3s ease;
 }
-
 .chip:hover{
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-  box-shadow: 0 8px 22px rgba(92,242,255,.45);
+  transform: translateY(-2px);
+  background: var(--forest);
+  color: #f4f1e6;
+}
+@keyframes chipIn{
+  from{ opacity: 0; transform: translateY(8px) scale(.95); }
+  to{ opacity: 1; transform: none; }
 }
 
+.foot{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.dots{ display: flex; gap: 6px; }
+.dots i{
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(31,58,39,.18);
+  transition: width .4s var(--ease), background .3s ease;
+}
+.dots i.on{
+  width: 22px;
+  background: var(--accent);
+}
+
+.more{
+  color: var(--forest);
+  padding: 6px 0;
+}
+
+.swap-enter-active, .swap-leave-active{ transition: opacity .35s ease, transform .35s var(--ease); }
+.swap-enter-from{ opacity: 0; transform: translateX(16px); }
+.swap-leave-to{ opacity: 0; transform: translateX(-16px); }
+
+/* Visual */
 .about-visual{
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card{
   position: relative;
+  width: min(440px, 100%);
+  aspect-ratio: 4 / 5;
+  border-radius: 32px;
+  background:
+    radial-gradient(120% 80% at 50% 100%, #b9d2bd, transparent 60%),
+    linear-gradient(180deg, #f3ead2, #dfe9d9);
+  box-shadow: var(--shadow-lift);
 }
 
-/* targhetta sopra l'immagine - nascosta su desktop */
-.badge-mobile{
-  display: none;
+.profile-card img{
   position: absolute;
-  top: -14px;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  border-radius: 32px;
+  transform: translateZ(40px);
+}
+
+.halo{
+  position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
+  top: 40%;
+  width: 70%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) translateZ(10px);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255,240,200,.9), transparent);
 }
 
-/* MOBILE */
+.badge{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  border-radius: 18px;
+  transform: translateZ(80px);
+}
+.badge strong{ font-size: 20px; color: var(--forest); font-weight: 500; letter-spacing: -.02em; }
+
+.float-a{ left: -28px; top: 18%; animation: bob 6s ease-in-out infinite; }
+.float-b{
+  right: -24px;
+  bottom: 14%;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: var(--forest);
+  font-weight: 500;
+  animation: bob 7s ease-in-out -2s infinite;
+}
+
+.ping{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3fae62;
+  animation: ping 2s ease-out infinite;
+}
+
+@keyframes bob{
+  0%, 100%{ translate: 0 0; }
+  50%{ translate: 0 -10px; }
+}
+@keyframes ping{
+  0%{ box-shadow: 0 0 0 0 rgba(63,174,98,.6); }
+  100%{ box-shadow: 0 0 0 10px rgba(63,174,98,0); }
+}
+
 @media (max-width: 900px){
-
-  /* nascondo quella nel testo */
-  .about-text .eyebrow{
-    display: none;
+  .about{ padding: 80px 0; }
+  .about-grid{
+    grid-template-columns: 1fr;
+    gap: 48px;
   }
-
-  /* mostro quella sopra l'immagine */
-  .badge-mobile{
-    display: inline-block;
-    animation: floatBadge 3s ease-in-out infinite;
-  }
-
-
-@keyframes floatBadge{
-  0%,100%{ transform: translateX(-50%) translateY(0); }
-  50%{ transform: translateX(-50%) translateY(-6px); }
-}
+  .about-visual{ order: -1; }
+  .profile-card{ width: min(320px, 82%); }
+  .float-a{ left: -14px; }
+  .float-b{ right: -14px; }
+  .tabs{ display: grid; width: 100%; }
+  .panel{ padding: 22px 20px; }
 }
 </style>

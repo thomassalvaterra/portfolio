@@ -8,6 +8,7 @@
       </div>
     </div>
 
+    <span class="stars">★★★★★</span>
     <p class="text">“{{ r.text }}”</p>
   </article>
 </template>
@@ -23,33 +24,23 @@ defineProps({
 
 <style scoped>
 .review-card{
-  min-width: 360px;
-  max-width: 360px;
-  background: #0b0f14;
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: 16px;
-  padding: 16px 18px 14px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.55);
+  width: 380px;
+  flex-shrink: 0;
+  background: var(--panel-solid);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 22px 24px;
+  box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  cursor: default;
-
-  transition:
-    transform .35s cubic-bezier(.2,.8,.2,1),
-    box-shadow .35s ease,
-    border-color .35s ease;
-
-  /* aiuta su mobile/iOS a non “scattare” */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  gap: 12px;
+  transition: transform .5s var(--ease), box-shadow .4s ease, background .4s ease;
 }
 
 .review-card:hover{
-  transform: translateY(-6px) rotateX(6deg);
-  box-shadow: 0 30px 80px rgba(0,0,0,.75);
-  border-color: white;
+  transform: translateY(-6px) rotate(-1deg);
+  background: #fff;
+  box-shadow: var(--shadow-lift);
 }
 
 .head{
@@ -59,30 +50,34 @@ defineProps({
 }
 
 .head img{
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid white;
-  background: #fff;
+  box-shadow: 0 0 0 3px #fff, 0 6px 14px -6px rgba(31,58,39,.5);
 }
 
 .meta strong{
   display: block;
-  font-size: 14px;
-  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--forest);
+}
+.meta span{
+  font-size: 13px;
+  color: var(--muted);
 }
 
-.meta span{
-  font-size: 12px;
-  color: rgba(255,255,255,.6);
+.stars{
+  color: #d6a43a;
+  letter-spacing: 2px;
+  font-size: 13px;
 }
 
 .text{
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.55;
-  color: rgba(255,255,255,.75);
-
+  color: #47544a;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   line-clamp: 4;
@@ -90,46 +85,16 @@ defineProps({
   overflow: hidden;
 }
 
-/* ============ MOBILE ============ */
 @media (max-width: 900px){
-
   .review-card{
-    min-width: 260px;      /* più piccola */
-    max-width: 260px;
-    padding: 14px 14px 12px;
-    border-radius: 14px;
-    gap: 8px;
+    width: 280px;
+    padding: 18px;
+    border-radius: 20px;
   }
-
-  /* hover/3D disattivato su touch (evita “saltelli”) */
-  .review-card:hover{
-    transform: none;
-    box-shadow: 0 20px 50px rgba(0,0,0,.55);
-    border-color: rgba(255,255,255,.65);
-  }
-
-  .head{
-    gap: 10px;
-  }
-
-  .head img{
-    width: 34px;
-    height: 34px;
-    border-width: 2px;
-  }
-
-  .meta strong{
-    font-size: 13px;
-  }
-
-  .meta span{
-    font-size: 11px;
-  }
-
+  .review-card:hover{ transform: none; }
   .text{
-    font-size: 13px;
-    line-height: 1.45;
-    -webkit-line-clamp: 3; /* meno alta */
+    font-size: 14px;
+    -webkit-line-clamp: 3;
     line-clamp: 3;
   }
 }

@@ -1,76 +1,95 @@
 <template>
-  <section id="home" class="hero hero-full">
-    <div class="grid">
-      <div ref="glowRef" class="left hero-text glow-bg">
+  <section id="home" class="hero">
+    <HeroScene />
 
-        <div class="social-proof">
-          <div class="top-line">
-            <span class="stars">★★★★★</span>
-            <span class="reviews">+200 recensioni</span>
-          </div>
-          <div class="tagline">Trasformo le tue idee in realtà.</div>
+    <div class="hero-inner">
+      <!-- Centro -->
+      <div ref="center" class="center">
+        <div class="social-proof appear" style="--d: 0ms">
+          <span class="stars">★★★★★</span>
+          <span class="reviews">+200 recensioni</span>
         </div>
 
         <h1 class="title">
-          <span class="line-1">Ciao sono un</span>
+          <span class="line-1">
+            <span v-for="(w, i) in ['Ciao', 'sono', 'un']" :key="w" class="word" :style="{ '--d': `${120 + i * 90}ms` }">{{ w }}</span>
+          </span>
           <span class="line-2">
-            <span class="typed">{{ currentWord }}</span>
-            <span class="cursor">|</span>
+            <span class="typed">{{ currentWord }}</span><span class="cursor"></span>
           </span>
         </h1>
 
-        <p>
-          Aiuto piccole attività e professionisti a farsi notare online con
-          interfacce veloci, responsive e dal look futuristico.
+        <p class="sub appear" style="--d: 520ms">
+          Aiuto <strong>piccole attività e professionisti</strong> a farsi notare online con
+          interfacce <strong>veloci, responsive</strong> e dal look futuristico.
         </p>
+      </div>
+
+      <!-- Basso sinistra -->
+      <div class="bottom-left appear" style="--d: 700ms">
+        <div class="core">
+          <span class="spinner-dots"></span>
+          <span>Trasformo le tue idee in realtà.</span>
+        </div>
 
         <ul class="stack">
-          <li>✅ Ti aiuto a farti notare online (UI che colpiscono)</li>
-          <li>✅ Performance alte: siti rapidi e fluidi</li>
-          <li>✅ Lavoro su misura, niente template copia-incolla</li>
-          <li>✅ Seguo il progetto dall’idea al lancio</li>
+          <li>Ti aiuto a farti notare online (UI che colpiscono)</li>
+          <li>Performance alte: siti rapidi e fluidi</li>
+          <li>Lavoro su misura, niente template copia-incolla</li>
+          <li>Seguo il progetto dall’idea al lancio</li>
         </ul>
-      </div>
 
-      <div ref="glowCardRef" class="right glow-bg glow-card">
-        <div class="trust-card enter-right">
-          <div class="trust-header">Il tuo Sviluppatore di Fiducia</div>
-
-          <div class="trust-body">
-            <h3>Prenota subito una consulenza gratuita</h3>
-            <p>🚀 Parlami della tua idea o esponi il tuo problema e vediamo come poterlo risolvere!</p>
-
-            <a href="#contatti" class="trust-cta">Prenota ora</a>
-          </div>
+        <div class="actions">
+          <a href="#contatti" class="btn-light">Contattami</a>
+          <a href="#progetti" class="btn-ghost light">Vedi i progetti <span class="arrow">→</span></a>
         </div>
       </div>
+
+      <!-- Basso destra: card di fiducia -->
+      <div class="bottom-right appear" style="--d: 850ms">
+        <div v-tilt="10" class="trust-card">
+          <div class="trust-header">
+            <span class="live"></span>
+            Il tuo Sviluppatore di Fiducia
+          </div>
+          <h3>Prenota subito una consulenza gratuita</h3>
+          <p>🚀 Parlami della tua idea o esponi il tuo problema e vediamo come poterlo risolvere!</p>
+          <a href="#contatti" class="btn-dark trust-cta">Prenota ora</a>
+        </div>
+        <div class="trust-meta">▸ Consulenza gratuita <span>30 min</span></div>
+      </div>
+
+      <a href="#chi-sono" class="scroll-hint appear" style="--d: 1100ms" aria-label="Scorri">
+        <span></span>
+      </a>
     </div>
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import HeroScene from './HeroScene.vue'
 
 const words = ['Developer', 'Frontend Dev', 'Freelancer']
-const currentWord = ref('Developer') // parola fissa di default (mobile)
+const currentWord = ref('Developer')
 let wordIndex = 0
-let charIndex = 0
+let charIndex = words[0].length
 let deleting = false
-let isDesktop = window.innerWidth >= 768
+let timer = null
 
 const typeSpeed = 90
-const deleteSpeed = 60
-const pauseAfterType = 900
+const deleteSpeed = 55
+const pauseAfterType = 1600
 
 const loopType = () => {
-  if (!isDesktop) return   // ❌ su mobile non anima
-
   const full = words[wordIndex]
 
   if (!deleting) {
     currentWord.value = full.slice(0, charIndex++)
     if (charIndex > full.length) {
-      setTimeout(() => (deleting = true), pauseAfterType)
+      deleting = true
+      timer = setTimeout(loopType, pauseAfterType)
+      return
     }
   } else {
     currentWord.value = full.slice(0, charIndex--)
@@ -81,312 +100,354 @@ const loopType = () => {
     }
   }
 
-  setTimeout(loopType, deleting ? deleteSpeed : typeSpeed)
+  timer = setTimeout(loopType, deleting ? deleteSpeed : typeSpeed)
 }
 
-// 👉 Glow parallax
-const glowRef = ref(null)
-const glowCardRef = ref(null)
-
+// il testo centrale sale e sfuma mentre si scorre
+const center = ref(null)
+let ticking = false
 const onScroll = () => {
-  const scrollY = Math.max(0, window.scrollY)
-
-  if (glowRef.value) {
-    glowRef.value.style.setProperty('--glow-shift', `${Math.min(scrollY * 0.06, 180)}px`)
-  }
-
-  if (glowCardRef.value) {
-    glowCardRef.value.style.setProperty('--glow-shift', `${Math.min(scrollY * 0.04, 120)}px`)
-  }
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    const s = Math.min(window.scrollY, window.innerHeight)
+    if (center.value) {
+      center.value.style.transform = `translate3d(0, ${s * -0.25}px, 0)`
+      center.value.style.opacity = String(1 - s / (window.innerHeight * 0.8))
+    }
+    ticking = false
+  })
 }
 
 onMounted(() => {
-  isDesktop = window.innerWidth >= 768
-  if (isDesktop) loopType()
-  window.addEventListener('scroll', onScroll, { passive: true })
+  // parte dopo l'intro, la parola iniziale è già scritta
+  deleting = true
+  timer = setTimeout(loopType, 2600)
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('scroll', onScroll, { passive: true })
+  }
 })
 
 onUnmounted(() => {
+  clearTimeout(timer)
   window.removeEventListener('scroll', onScroll)
 })
 </script>
 
 <style scoped>
-
-
-.hero .left{ 
-  grid-column: span 8; 
-}
-
-.hero .right{ 
-  grid-column: span 4; 
-  justify-self: end; 
-}
-
-/* Testo a sinistra libero sullo sfondo */
-.hero-text{
-  padding: 16px 8px 16px 8px; /* un po’ di margine dal bordo */
-}
-
-.hero-text p{
-  max-width: 52ch;      /* larghezza simile allo screenshot */
-  margin-top: 14px;
-  font-size: 20px;
-}
-
-.hero-text ul{
-  margin-top: 16px;
-  display: grid;
-  gap: 8px;
-}
-
-/* Hero full width */
-.hero-full{
-  width: 100%;
-  padding: 140px 0 88px; 
-}
-
-.hero-full .grid{
-  max-width: 1480px;     /* più largo = meno spazio vuoto */
-  margin: 0 auto;
-  padding: 0 60px;      /* margine laterale simile allo screenshot */
-  gap: 14px;            /* colonne più vicine */
-}
-
-/* Spingiamo davvero a sinistra il testo */
-.hero-full .left{
-  padding-left: 12px;
-}
-
-@media (min-width: 1200px){
-  .hero-full .right{
-    margin-left: 24px;   /* ✅ usa margin invece di transform */
-  }
-}
-
-@media (min-width: 900px){
-  .hero .right{
-    margin-left: 24px;   /* ✅ */
-  }
-}
-
-.stack li{
-  margin-top: 20px 0;
-  font-size: 15px;
-  font-weight: 600;
-  /*text-shadow: 0 0 12px rgba(92,242,255,.35);*/
-}
-
-/* Card di fiducia a destra */
-.trust-card{
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 16px;
+.hero{
+  position: relative;
+  min-height: 100svh;
+  min-height: max(100svh, 760px);
   overflow: hidden;
-  max-width: 440px;
-  margin-left: auto; /* spinge a destra */
-  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  isolation: isolate;
 }
 
-.trust-header{
-  background: linear-gradient(90deg, #2563eb, #3b82f6);
-  color: white;
-  padding: 12px 16px;
-  font-weight: 800;
-  letter-spacing: .8px;
+.hero-inner{
+  position: relative;
+  z-index: 2;
+  max-width: 1440px;
+  min-height: inherit;
+  margin: 0 auto;
+  padding: 128px 40px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 40px;
+}
+
+/* ---------- Entrata ---------- */
+.appear,
+.word{
+  opacity: 0;
+  animation: rise 1.1s var(--ease) both;
+  animation-delay: calc(1300ms + var(--d, 0ms));
+}
+
+@keyframes rise{
+  from{ opacity: 0; transform: translateY(30px); filter: blur(10px); }
+  to{ opacity: 1; transform: none; filter: none; }
+}
+
+/* ---------- Centro ---------- */
+.center{
+  grid-column: 1 / -1;
   text-align: center;
-  font-size: 18px;
+  will-change: transform, opacity;
 }
 
-.trust-body{
-  padding: 28px;
-}
-
-.trust-body h3{
-  text-align: center;
-  margin: 6px 0 20px;
-  font-size: 25px;
-}
-
-.trust-body p{
-  text-align: center;
-  color: var(--muted);
+.social-proof{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.8);
+  backdrop-filter: blur(10px);
+  font-size: 14px;
   margin-bottom: 20px;
-  font-size: 16px
 }
-
-.trust-cta{
-  display:flex;
-  justify-content: center;
-  background: #2563eb;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  box-shadow: 0 0 24px rgba(37,99,235,.45);
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-  font-size: 16px;
-}
-
-.trust-cta:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 0 36px rgba(37,99,235,.7);
-  filter: brightness(1.05);
-}
-
-h1{ font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 12px 0; }
-.accent{
-  display:block;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  filter: drop-shadow(0 0 12px rgba(92,242,255,.35));
-}
-p{ color: var(--muted); max-width: 52ch; }
-.chip{ display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); font-size:12px; }
-.actions{ display:flex; gap:12px; margin-top: 18px; }
-.ghost{ color: var(--text); opacity:.8; }
-.ghost:hover{ opacity:1; text-decoration: underline; }
-.orb{
-  position:absolute; width:220px; height:220px; right:-40px; top:-40px; border-radius:50%;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(92,242,255,.9), transparent 55%),
-    radial-gradient(circle at 70% 70%, rgba(138,125,255,.9), transparent 55%);
-  filter: blur(22px); animation: float 8s ease-in-out infinite;
-}
-@keyframes float{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(16px); } }
-.stack{ list-style:none; padding:0; margin:0; }
-.stack li{ padding:10px 0; border-bottom: 1px dashed rgba(255,255,255,.1); }
+.stars{ color: #d6a43a; letter-spacing: 2px; font-size: 13px; }
+.reviews{ font-weight: 500; color: var(--forest); }
 
 .title{
-  font-weight: 900;
-  line-height: 1.05;
+  font-weight: 400;
+  line-height: .95;
+  letter-spacing: -.055em;
+  font-size: clamp(54px, 8.2vw, 124px);
 }
 
 .line-1{
-  display: block;
-  font-size: clamp(44px, 6vw, 72px);
-  opacity: .85;
+  display: flex;
+  justify-content: center;
+  gap: 0 .22em;
+  flex-wrap: wrap;
+}
+.line-1 .word{
+  display: inline-block;
+  background: linear-gradient(180deg, #2d6440, #1c4128);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: .06em;
 }
 
 .line-2{
   display: block;
-  font-size: clamp(72px, 9vw, 112px); /* 🔥 più grande */
-  margin-top: 10px;
-  min-height: 1.1em;
+  min-height: 1em;
+  padding-bottom: .08em;
 }
 
 .typed{
-  color: var(--accent); /* blu/ciano del tema */
-  text-shadow: 0 0 28px rgba(92,242,255,.45);
+  background: linear-gradient(90deg, #6c9c7a, #a6c8ad 70%, #b9d4bc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .cursor{
-  margin-left: 6px;
+  display: inline-block;
+  width: .06em;
+  height: .8em;
+  margin-left: .06em;
+  background: #8fb59a;
+  border-radius: 2px;
+  vertical-align: -.04em;
   animation: blink 1s steps(1) infinite;
 }
+@keyframes blink{ 50%{ opacity: 0; } }
 
-@keyframes blink{
-  50%{ opacity: 0; }
+.sub{
+  margin: 22px auto 0;
+  max-width: 34ch;
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.45;
+  color: #6b766b;
+  letter-spacing: -.01em;
+}
+.sub strong{ font-weight: 500; color: #3c4a3f; }
+
+/* ---------- Basso sinistra ---------- */
+.bottom-left{
+  align-self: end;
+  max-width: 400px;
+  color: #eef2e6;
+  text-shadow: 0 1px 12px rgba(10,20,12,.45);
 }
 
-.social-proof{
+.core{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.spinner-dots{
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px dotted #eef2e6;
+  animation: spin 6s linear infinite;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+.stack{
+  list-style: none;
   display: grid;
   gap: 6px;
-  margin-bottom: 12px;
-  font-size: 20px;
+  font-size: 14.5px;
+  color: rgba(238,242,230,.85);
 }
-
-.top-line{
-  flex-direction: column;   /* stelle sopra */
-    align-items: flex-start;  /* oppure center se le vuoi centrate */
-    gap: 6px;
-}
-
-.stars{
-  color: #facc15; /* giallo stelline */
-  text-shadow: 0 0 12px rgba(250, 204, 21, .45);
-  letter-spacing: 1px;
-  order: 1;
-    font-size: 18px; 
-}
-
-.reviews{
-  font-weight: 700;
-  opacity: .9;
-  order: 2;
-}
-
-.tagline{
-  color: var(--muted);
-  font-size: 16px;
-}
-
-.glow-bg{
+.stack li{
   position: relative;
+  padding-left: 18px;
 }
-
-.glow-bg::before{
+.stack li::before{
   content: '';
   position: absolute;
-  inset: -60px;
-  background:
-    radial-gradient(380px 220px at 20% 20%, rgba(59,130,246,.28), transparent 60%),
-    radial-gradient(420px 260px at 40% 60%, rgba(16,185,129,.22), transparent 65%);
-  filter: blur(36px);
-  z-index: -1;
-  transform: translate3d(0, var(--glow-shift, 0px), 0);  /* 👈 usa la variabile */
-  will-change: transform;
+  left: 0;
+  top: .62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b7d39a;
 }
 
-@keyframes glowMove{
-  0%   { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(20px, -10px) scale(1.05); }
+.actions{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+  text-shadow: none;
+}
+.btn-ghost.light{ color: #f4f1e6; }
+
+/* ---------- Basso destra ---------- */
+.bottom-right{
+  align-self: end;
+  justify-self: end;
+  width: min(360px, 100%);
 }
 
-.enter-right{
-  animation: slideInRight .7s cubic-bezier(.2,.8,.2,1) .1s both;
-  animation-duration: 1s;
+.trust-card{
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.42);
+  border: 1px solid rgba(255,255,255,.7);
+  backdrop-filter: blur(22px) saturate(1.3);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  box-shadow: 0 30px 60px -24px rgba(10,24,14,.55);
+  color: var(--text);
 }
 
-@keyframes slideInRight{
-  from{
-    opacity: 0;
-    transform: translateX(40px) scale(.98);
-  }
-  to{
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
+.trust-header{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--forest-2);
+  background: rgba(255,255,255,.7);
+  border-radius: 999px;
+  padding: 5px 12px 5px 10px;
+  margin-bottom: 14px;
 }
 
-@media (max-width: 768px) {
-  .line-2{
-    font-size: 48px;
-  }
+.live{
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3fae62;
+  box-shadow: 0 0 0 0 rgba(63,174,98,.6);
+  animation: ping 2s ease-out infinite;
+}
+@keyframes ping{
+  0%{ box-shadow: 0 0 0 0 rgba(63,174,98,.6); }
+  100%{ box-shadow: 0 0 0 10px rgba(63,174,98,0); }
+}
 
-  .cursor{
-    display: none;  /* ❌ niente cursore che lampeggia su mobile */
-  }
+.trust-card h3{
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  margin-bottom: 8px;
+  color: var(--forest);
+}
+.trust-card p{
+  font-size: 14.5px;
+  color: #3e4a40;
+  margin-bottom: 18px;
+}
+.trust-cta{ width: 100%; }
+
+.trust-meta{
+  margin-top: 12px;
+  font-size: 13px;
+  color: #eef2e6;
+  text-shadow: 0 1px 10px rgba(10,20,12,.5);
+  padding-left: 6px;
+}
+.trust-meta span{ opacity: .7; margin-left: 6px; }
+
+/* ---------- Scroll hint ---------- */
+.scroll-hint{
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,.85);
+  display: grid;
+  justify-items: center;
+  padding-top: 8px;
+}
+.scroll-hint span{
+  width: 4px;
+  height: 8px;
+  border-radius: 4px;
+  background: #fff;
+  animation: wheel 1.8s var(--ease) infinite;
+}
+@keyframes wheel{
+  0%{ opacity: 0; transform: translateY(-2px); }
+  30%{ opacity: 1; }
+  100%{ opacity: 0; transform: translateY(12px); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px){
+  .scroll-hint{ display: none; }
 }
 
 @media (max-width: 900px){
-  .hero .left,
-  .hero .right{
-    grid-column: 1 / -1;   /* prende tutta la riga */
-    justify-self: center; /* centra */
+  .hero{ min-height: auto; }
+
+  .hero-inner{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    padding: 120px 16px 40px;
+    gap: 22px;
   }
 
-  .hero-full .grid{
-    padding: 0 16px;
-    text-align: center;
+  .title{ font-size: clamp(46px, 13vw, 72px); }
+
+  .sub{ margin-top: 20px; }
+
+  .hero :deep(.scene){
+    bottom: auto;
+    height: 820px;
   }
 
-  .hero-text{
-    padding: 0;
+  .bottom-left{
+    margin-top: 290px;
+    max-width: none;
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(20,36,24,.45);
+    border: 1px solid rgba(255,255,255,.18);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
   }
 
-  .trust-card{
-    margin: 24px auto 0; /* card centrata */
+  .bottom-right{
+    justify-self: stretch;
+    width: 100%;
   }
+
+  .trust-card{ background: rgba(255,255,255,.75); }
+
+  .trust-meta{
+    color: var(--muted);
+    text-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .appear, .word{ animation: none; opacity: 1; }
 }
 </style>

@@ -1,97 +1,68 @@
 <template>
-  <section id="progetti" class="projects" ref="projectsSection">
-    <div class="projects-head">
-      <span class="eyebrow">Progetti</span>
-      <p class="glow-words">
-        <span>Ho</span>
-        <span>lavorato</span>
-        <span>a</span>
-        <span>questi</span>
-        <span>progetti</span>
-        <span>utilizzando</span>
-        <span>diversi</span>
-        <span>linguaggi</span>
-        <span>di</span>
-        <span>programmazione</span>
-        <span>e</span>
-        <span>tecnologie</span>
-        <span>moderne.</span>
-        <span>Qui</span>
-        <span>trovi</span>
-        <span>una</span>
-        <span>selezione</span>
-        <span>dei</span>
-        <span>miei</span>
-        <span>lavori</span>
-        <span>più</span>
-        <span>rilevanti,</span>
-        <span>che</span>
-        <span>dimostrano</span>
-        <span>le</span>
-        <span>mie</span>
-        <span>competenze</span>
-        <span>e</span>
-        <span>la</span>
-        <span>mia</span>
-        <span>passione</span>
-        <span>per</span>
-        <span>lo</span>
-        <span>sviluppo.</span>
-      </p>
-    </div>
+  <section id="progetti" ref="projectsSection" class="projects">
+    <div class="wrap">
+      <div class="head">
+        <span v-reveal class="eyebrow">Progetti</span>
+        <p ref="wordsEl" class="glow-words">
+          <span v-for="(w, i) in words" :key="i" :style="{ '--i': i }" :class="{ lit: i < litCount }">{{ w }}</span>
+        </p>
+      </div>
 
-    <div class="projects-archive">
-      <article
-        v-for="(project, i) in (showAll ? projects : projects.slice(0,3))"
-        :key="i"
-        class="project"
-        :class="{ in: visible[i] }"
-        :ref="el => (projectEls[i] = el)"
-      >
-      
-        <div class="project-media">
-          <img :src="project.image" :alt="project.title" />
-        </div>
-
-        <div class="project-info">
-          <h3>{{ project.title }}</h3>
-          <p class="desc">{{ project.desc }}</p>
-
-          <div class="tags">
-            <span v-for="(tag, t) in project.tech" :key="t">{{ tag }}</span>
-          </div>
-
-          <a :href="project.link" target="_blank" class="btn">
-            Apri progetto →
+      <div class="list">
+        <article
+          v-for="(project, i) in (showAll ? projects : projects.slice(0, 3))"
+          :key="project.title"
+          v-reveal
+          class="project"
+          :class="{ flip: i % 2 === 1 }"
+        >
+          <a v-tilt="7" :href="project.link" target="_blank" class="media">
+            <img :src="project.image" :alt="project.title" loading="lazy" />
+            <span class="open">Apri ↗</span>
           </a>
-        </div>
-      </article>
-    </div>
-      <div class="projects-more" v-if="projects.length > 3">
-        <button class="btn-more" @click="toggleProjects">
+
+          <div class="info">
+            <span class="index">{{ String(i + 1).padStart(2, '0') }} / {{ String(projects.length).padStart(2, '0') }}</span>
+            <h3>{{ project.title }}</h3>
+            <p class="desc">{{ project.desc }}</p>
+
+            <div class="tags">
+              <span v-for="tag in project.tech" :key="tag">{{ tag }}</span>
+            </div>
+
+            <a :href="project.link" target="_blank" class="btn-dark">Apri progetto →</a>
+          </div>
+        </article>
+      </div>
+
+      <div v-if="projects.length > 3" class="more">
+        <button class="btn-light" @click="toggleProjects">
           {{ showAll ? 'Mostra meno' : 'Mostra altri progetti' }}
         </button>
       </div>
+    </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted,nextTick } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const words = 'Ho lavorato a questi progetti utilizzando diversi linguaggi di programmazione e tecnologie moderne. Qui trovi una selezione dei miei lavori più rilevanti, che dimostrano le mie competenze e la mia passione per lo sviluppo.'.split(' ')
 
 const projects = [
   {
     title: 'Flabber Studio',
-    desc: 'Ho sviluppato un’esperienza web immersiva per Flabber, combinando 3D, animazioni e interazioni dinamiche.Un racconto digitale che ripercorre la vera storia del brand, presentandone identità, progetti e collaborazioni.',
+    desc: 'Ho sviluppato un’esperienza web immersiva per Flabber, combinando 3D, animazioni e interazioni dinamiche. Un racconto digitale che ripercorre la vera storia del brand, presentandone identità, progetti e collaborazioni.',
     tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'WebGL + GLSL'],
     image: '/project/Flabber.png',
-    link: 'https://flabber.it/',
+    link: 'https://flabber.it/'
   },
   {
     title: 'Studio Giorgita',
-    desc: 'Sviluppo di una piattaforma web moderna per uno studio multidisciplinare,   con focus su esperienza utente, identità visiva e conversione. Il progetto integra un sistema di prenotazione intelligente, animazioni raffinate, design responsive e performance elevate (99/100 Lighthouse).',
+    desc: 'Sviluppo di una piattaforma web moderna per uno studio multidisciplinare, con focus su esperienza utente, identità visiva e conversione. Il progetto integra un sistema di prenotazione intelligente, animazioni raffinate, design responsive e performance elevate (99/100 Lighthouse).',
     tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
     image: '/project/StudioGiorgita.png',
-    link: 'https://studiogiorgita.it/',
+    link: 'https://studiogiorgita.it/'
   },
   {
     title: 'SportCity',
@@ -111,7 +82,7 @@ const projects = [
     title: 'Ristorboo',
     desc: 'Sito Web completo per ristorante con design accattivante e funzionalità di prenotazione.',
     tech: ['Vue', 'Laravel', 'MySQL', 'UI/UX'],
-    image: '/project/RistorBoo.png',   // 🔥 attenzione maiuscole!
+    image: '/project/RistorBoo.png',
     link: 'https://github.com/thomassalvaterra/laravel-auth'
   },
   {
@@ -137,314 +108,182 @@ const projects = [
   }
 ]
 
-const projectEls = ref([])
-const visible = ref([])
 const projectsSection = ref(null)
 const showAll = ref(false)
 
-const toggleProjects = async () => {
+const toggleProjects = () => {
   showAll.value = !showAll.value
-
-  await nextTick()
-
-  if (showAll.value) {
-    visible.value = projects.map(() => true)
-  } else {
-    visible.value = projects.map((_, i) => i < 3)
-
-    // scrolla all'inizio della sezione
-    projectsSection.value?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    })
+  if (!showAll.value) {
+    projectsSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
 
-let io = null
+// le parole si "accendono" una dopo l'altra mentre si scorre
+const wordsEl = ref(null)
+const litCount = ref(0)
+let ticking = false
+
+const onScroll = () => {
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    if (wordsEl.value) {
+      const r = wordsEl.value.getBoundingClientRect()
+      const vh = window.innerHeight
+      const progress = Math.min(Math.max((vh * 0.85 - r.top) / (r.height + vh * 0.35), 0), 1)
+      litCount.value = Math.round(progress * words.length)
+    }
+    ticking = false
+  })
+}
 
 onMounted(() => {
-  visible.value = projects.map(() => false)
-
-  const isMobile = window.matchMedia('(max-width: 900px)').matches
-
-  // ✅ Su mobile: rendili subito visibili (zero bug)
-  if (isMobile) {
-    visible.value = projects.map(() => true)
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    litCount.value = words.length
     return
   }
-
-  // ✅ Desktop/tablet: reveal robusto con IntersectionObserver
-  io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return
-        const idx = Number(entry.target.dataset.idx)
-        visible.value[idx] = true
-        io.unobserve(entry.target)
-      })
-    },
-    { threshold: 0.18 }
-  )
-
-  // collega osservatore
-  projectEls.value.forEach((el, i) => {
-    if (!el) return
-    el.dataset.idx = String(i)
-    io.observe(el)
-  })
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
 })
 
-onUnmounted(() => {
-  if (io) io.disconnect()
-})
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <style scoped>
-.projects {
-  padding: 160px 0 200px;
+.projects{
+  padding: 120px 0 140px;
 }
 
-.projects-head {
-  max-width: 900px;
-  margin: 0 auto 80px;
+.head{
+  max-width: 980px;
+  margin: 0 auto 110px;
   text-align: center;
 }
 
-.eyebrow {
-  display: inline-block;
-  margin-bottom: 14px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-weight: 800;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #0b0f14;
-  font-size: 30px;
-}
-
-.projects-head h2 {
-  font-size: clamp(36px, 6vw, 56px);
-  margin-bottom: 12px;
-}
-
-.projects-head p {
-  color: var(--muted);
-}
-
-.projects-archive {
-  display: grid;
-  gap: 80px;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 60px;
-}
-
-.project {
-  display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: 48px;
-  align-items: center;
-
-  opacity: 0;
-  transform: translateY(120px) scale(.96);
-  transition: all .9s cubic-bezier(.2,.8,.2,1);
-}
-
-.project.in {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.project-media {
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 40px 100px rgba(0,0,0,.55);
-  border: 1px solid rgba(255,255,255,.12);
-}
-
-.project-media img {
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-  display: block;
-}
-
-.project-info h3 {
-  font-size: clamp(26px, 3vw, 36px);
-  margin-bottom: 10px;
-  font-family: "Lavishly Yours", cursive;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.project-info .desc {
-  color: var(--muted);
-  max-width: 48ch;
-  margin-bottom: 18px;
-  font-size: 18px;      /* 🔥 più grande */
-  line-height: 1.6; 
-}
-
-.tags {
+.glow-words{
+  margin-top: 28px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  justify-content: center;
+  gap: 0 .28em;
+  font-size: clamp(26px, 3.4vw, 46px);
+  line-height: 1.18;
+  letter-spacing: -.035em;
+}
+
+.glow-words span{
+  color: rgba(31,58,39,.16);
+  transition: color .5s ease;
+}
+.glow-words span.lit{ color: var(--forest); }
+
+.list{
+  display: grid;
+  gap: 120px;
+}
+
+.project{
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.project.flip .media{ order: 2; }
+
+.media{
+  display: block;
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  padding: 14px;
+  background: linear-gradient(160deg, #e7eedf, #d3e2d2);
+  box-shadow: var(--shadow-lift);
+}
+
+.media img{
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  border-radius: 18px;
+  transition: transform 1s var(--ease);
+}
+.media:hover img{ transform: scale(1.04); }
+
+.open{
+  position: absolute;
+  right: 28px;
+  bottom: 28px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(10px);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--forest);
+  opacity: 0;
+  transform: translateY(10px) translateZ(40px);
+  transition: opacity .4s ease, transform .4s var(--ease);
+}
+.media:hover .open{ opacity: 1; transform: translateZ(40px); }
+
+.index{
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: .08em;
+}
+
+.info h3{
+  font-size: clamp(32px, 3.6vw, 48px);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  color: var(--forest);
+  margin: 10px 0 16px;
+}
+
+.desc{
+  color: var(--muted);
+  font-size: 16.5px;
+  line-height: 1.65;
   margin-bottom: 22px;
 }
 
-.tags span {
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-}
-
-.btn {
-  display: inline-block;
-  padding: 12px 22px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #0b0f14;
-  font-weight: 900;
-}
-
-@media (max-width: 900px) {
-  .project {
-  grid-template-columns: 1fr;
-  gap: 18px;
-  padding: 32px 0;   /* 🔥 distanza pulita tra le card */
-}
-
-  .projects-head{
-    margin: 0 auto 46px;
-    padding: 0 16px;
-    text-align: center;
-  }
-
-  .projects-head .eyebrow{
-    font-size: 12px;          /* prima era 30px (troppo) */
-    font-weight: 900;
-    letter-spacing: .14em;
-    padding: 6px 14px;
-  }
-
-  .projects-head h2{
-    font-size: 32px;
-    margin: 12px 0 10px;
-    line-height: 1.1;
-  }
-
-  /* Testo “glow words” centrato e con spaziatura migliore */
-  .projects-head .glow-words{
-    justify-content: center;
-    text-align: center;
-    gap: 6px 8px;
-    line-height: 1.55;
-    max-width: 560px;
-    margin: 0 auto;
-  }
-
-  .projects-head .glow-words span{
-    font-size: 16px !important;   /* 🔥 più grande su mobile */
-  }
-
-  .projects-archive{
-    padding: 0 16px;
-    gap: 10px; /* più vicino */
-  }
-
-  .project{
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .project-media{
-    border-radius: 18px;
-  }
-
-  .project-media img{
-    height: 210px;
-  }
-
-  /* Info centrata */
-  .project-info{
-    text-align: center;
-  }
-
-  .project-info h3{
-    font-size: 34px; /* font corsivo, ma leggibile */
-    margin-bottom: 8px;
-  }
-
-  .project-info .desc{
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 52ch;
-    font-size: 19px !important;   /* 🔥 forza mobile */
-    line-height: 1.7 !important; /* 🔥 più aria */
-  }
-
-  .tags{
-    justify-content: center;
-    margin-bottom: 16px;
-  }
-
-  .btn{
-    display: inline-block;
-    justify-content: center;
-    align-items: center;
-    width: 100%;           /* bottone full */
-    max-width: 340px;      /* ma non enorme */
-    margin: 0 auto;
-  }
-}
-
-.projects-head .glow-words {
+.tags{
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.tags span{
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--forest-2);
 }
 
-.projects-head .glow-words span {
-  color: rgba(255,255,255,.55);
-  transition: 
-    color .2s ease,
-    text-shadow .2s ease,
-    transform .2s ease;
-  cursor: default;
-}
-
-.projects-head .glow-words span:hover {
-  color: #ffffff;
-  text-shadow: 
-    0 0 8px rgba(255,255,255,.6),
-    0 0 18px rgba(255,255,255,.4),
-    0 0 28px rgba(255,255,255,.2);
-  transform: translateY(-1px);
-}
-
-.projects-more{
+.more{
   display: flex;
   justify-content: center;
   margin-top: 100px;
 }
 
-.btn-more{
-  padding: 14px 26px;
-  border-radius: 12px;
-  font-weight: 900;
-  border: 1px solid rgba(255,255,255,.2);
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #0b0f14;
-  cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-
-.btn-more:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(92,242,255,.5);
+@media (max-width: 900px){
+  .projects{ padding: 80px 0; }
+  .head{ margin-bottom: 60px; }
+  .glow-words{ font-size: 24px; }
+  .list{ gap: 64px; }
+  .project{
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .project.flip .media{ order: 0; }
+  .media{ padding: 8px; border-radius: 22px; }
+  .media img{ border-radius: 16px; }
+  .info .btn-dark{ width: 100%; }
+  .more{ margin-top: 60px; }
 }
 </style>

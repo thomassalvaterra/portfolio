@@ -1,17 +1,9 @@
 <template>
-  <div
-    class="hero-logo"
-    :class="[
-      { hide: done },
-      { mobile: isMobile }
-    ]"
-  >
+  <div class="hero-logo" :class="{ hide: done }">
     <div class="intro-wrap">
       <img :src="logo" class="hero-logo-img" alt="Logo" />
-
-      <!-- TESTO SOLO DESKTOP -->
-      <h2 v-if="!isMobile" class="intro-text">
-        Benvenuto nel mio Portfolio
+      <h2 class="intro-text">
+        <span v-for="(w, i) in words" :key="i" :style="{ animationDelay: `${150 + i * 90}ms` }">{{ w }}</span>
       </h2>
     </div>
   </div>
@@ -22,14 +14,12 @@ import { ref, onMounted } from 'vue'
 import logo from '/logo.png'
 
 const done = ref(false)
-const isMobile = ref(false)
+const words = ['Benvenuto', 'nel', 'mio', 'Portfolio']
 
 onMounted(() => {
-  isMobile.value = window.innerWidth < 768
-
   setTimeout(() => {
     done.value = true
-  }, 1200)
+  }, 1300)
 })
 </script>
 
@@ -37,100 +27,72 @@ onMounted(() => {
 .hero-logo{
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100dvh; /* meglio su mobile */
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0b0f14;
+  background:
+    radial-gradient(60% 50% at 50% 60%, #fbefd0, transparent 70%),
+    var(--bg);
   z-index: 9999;
   pointer-events: none;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1s cubic-bezier(.76,0,.24,1), opacity .6s ease .6s;
 }
 
+/* la tenda si alza verso l'alto */
 .hero-logo.hide{
+  clip-path: inset(0 0 100% 0);
   opacity: 0;
 }
 
-/* Wrapper */
 .intro-wrap{
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 22px;
   align-items: center;
-  justify-content: center;
+  padding: 0 16px;
+  text-align: center;
 }
 
-/* LOGO */
 .hero-logo-img{
-  width: 220px;
-  height: 220px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  box-shadow: 0 0 60px rgba(0,255,140,.55);
+  box-shadow: 0 0 0 6px rgba(255,255,255,.8), 0 30px 60px -20px rgba(31,58,39,.5);
+  animation: pop .9s var(--ease) both;
 }
 
-/* Desktop: logo che vola nell’header */
-.hero-logo:not(.mobile) .hero-logo-img{
-  animation: logoToHeader 1.1s cubic-bezier(.2,.8,.2,1) forwards;
-}
-
-/* Mobile: logo che si dissolve */
-.hero-logo.mobile .hero-logo-img{
-  animation: logoFade 1.1s ease forwards;
-}
-
-/* TESTO (desktop) */
 .intro-text{
-  font-size: clamp(48px, 8vw, 112px);
-  font-weight: 800;
-  letter-spacing: .3px;
-  line-height: 0.95;
-  color: #e6f7f2;
-  opacity: 1;
-  animation: textFade 1.1s ease forwards;
-  animation-delay: .2s;
+  font-size: clamp(36px, 7vw, 96px);
+  font-weight: 400;
+  letter-spacing: -.05em;
+  line-height: 1;
+  color: var(--forest);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 .25em;
 }
 
-/* Animazioni */
-@keyframes textFade{
-  0%{ opacity: 1; transform: translateY(0); }
-  70%{ opacity: 1; }
-  100%{ opacity: 0; transform: translateY(-2px); }
+.intro-text span{
+  display: inline-block;
+  animation: word .8s var(--ease) both;
+}
+.intro-text span:last-child{
+  background: linear-gradient(90deg, #6f9e7d, #a9c9b0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-@keyframes logoToHeader{
-  0%{
-    transform: translate(0, 0) scale(1);
-  }
-  70%{
-    transform: translate(0, -180px) scale(.55);
-  }
-  100%{
-    transform: translate(-30vw, -42vh) scale(.42);
-  }
+@keyframes word{
+  from{ opacity: 0; transform: translateY(40%); filter: blur(8px); }
+  to{ opacity: 1; transform: none; filter: none; }
 }
 
-/* Mobile dissolve */
-@keyframes logoFade{
-  0%{
-    opacity: 1;
-    transform: scale(1);
-  }
-  100%{
-    opacity: 0;
-    transform: scale(.9);
-  }
-}
-
-@media (max-width: 768px){
-  .hero-logo{
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .hero-logo-img{
-    margin: 0 !important;
-    width: 160px;
-    height: 160px;
-  }
+@keyframes pop{
+  from{ opacity: 0; transform: scale(.6) rotate(-12deg); }
+  to{ opacity: 1; transform: none; }
 }
 </style>

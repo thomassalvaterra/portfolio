@@ -1,13 +1,13 @@
 <template>
   <section id="recensioni" class="reviews-marquee">
-    <div class="reviews-head">
-      <h2 class="reviews-title">Clienti felici, progetti che funzionano</h2>
-        <p class="reviews-sub">
+    <div v-reveal class="reviews-head wrap">
+      <span class="eyebrow">Recensioni</span>
+      <h2 class="section-title">Clienti felici, <span class="soft">progetti che funzionano</span></h2>
+      <p class="lead">
         Esperienze vere di chi ha visto il proprio progetto crescere
-        </p>
+      </p>
     </div>
 
-    <!-- Riga 1 -->
     <!-- Riga 1 -->
 <div class="track left">
   <div class="row marquee">
@@ -145,183 +145,48 @@ const reviewsC = [
 
 <style scoped>
 .reviews-marquee{
+  padding: 60px 0 140px;
   overflow: hidden;
   position: relative;
 }
 
 .reviews-head{
   text-align: center;
-    margin-bottom: 60px;
+  margin-bottom: 56px;
 }
+.reviews-head .section-title{ margin: 22px auto 18px; max-width: 15ch; }
+.reviews-head .lead{ margin: 0 auto; }
 
 .track{
   overflow: hidden;
   position: relative;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
 
 .row.marquee{
   display: flex;
   gap: 16px;
   width: max-content;
-  animation: marquee 36s linear infinite;
-  margin: 10px 0;
+  padding: 10px 0;
+  animation: marquee 60s linear infinite;
+  backface-visibility: hidden;
 }
+.row.reverse{ animation-direction: reverse; }
+.row.slow{ animation-duration: 80s; }
+.row.fast{ animation-duration: 46s; }
 
-.row.reverse{
-  animation-direction: reverse;
-}
-
-.row.slow{ animation-duration: 48s; }
-.row.fast{ animation-duration: 24s; }
+/* pausa al passaggio del mouse per poter leggere */
+.track:hover .row.marquee{ animation-play-state: paused; }
 
 @keyframes marquee{
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
 }
 
-.row{
-  display: flex;
-  gap: 16px;
-  width: max-content;
-}
-
-
-/* Card recensione */
-.review-card{
-  min-width: 320px;
-  max-width: 320px;
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 18px;
-  padding: 18px 18px 16px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.45);
-}
-
-.review-card .head{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.review-card img{
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.review-card p{
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-.review-card .stars{
-  margin-top: 8px;
-  letter-spacing: 2px;
-  color: #facc15;
-}
-
-.review-card.open{
-  pointer-events: auto;
-  filter: none !important;
-}
-
-.reviews-title{
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 900;
-  line-height: 1.05;
-  margin-bottom: 12px;
-  letter-spacing: -.02em;
-  text-shadow:
-    0 0 24px rgba(92,242,255,.25),
-    0 10px 40px rgba(0,0,0,.55);
-}
-
-.reviews-sub{
-  color: var(--muted);
-  max-width: 720px;
-  margin: 0 auto 28px;
-  font-size: 16px;
-}
-
-/* Variante extra glow per titoli super bold */
-.big-glow{
-  background: linear-gradient(90deg, #fff, #b6f1ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow:
-    0 0 30px rgba(182,241,255,.35),
-    0 0 60px rgba(182,241,255,.25);
-}
-
-/* ============ MOBILE REVIEW FIX ============ */
 @media (max-width: 900px){
-
-  /* niente stacchi enormi tra sezioni */
-  .reviews-marquee{
-    padding: 2px 0 24px; /* top/bottom piccoli */
-  }
-
-  .reviews-head{
-    margin-bottom: 18px;  /* prima 60px */
-    padding: 0 16px;
-  }
-
-  .reviews-title{
-    font-size: 30px;      /* più compatto */
-    line-height: 1.08;
-    margin-bottom: 10px;
-  }
-
-  .reviews-sub{
-    font-size: 15px;      /* leggibile */
-    line-height: 1.5;
-    margin: 0 auto 10px;  /* meno stacco */
-    max-width: 560px;
-  }
-
-  /* righe più vicine */
-  .row.marquee{
-    gap: 12px;
-    margin: 6px 0;        /* prima 10px */
-    animation-duration: 34s; /* un po' più fluido su mobile */
-    will-change: transform;
-    transform: translateZ(0);
-  }
-
-  .row.slow{ animation-duration: 44s; }
-  .row.fast{ animation-duration: 26s; }
-
-  /* card più “mobile friendly” */
-  :deep(.review-card){
-    min-width: 260px;     /* prima 320 */
-    max-width: 260px;
-    padding: 14px 14px 12px;
-    border-radius: 16px;
-  }
-
-  :deep(.review-card img){
-    width: 34px;
-    height: 34px;
-  }
-
-  :deep(.review-card p){
-    font-size: 13px;
-    line-height: 1.45;
-  }
-}
-
-/* (opzionale ma consigliato) evita “micro stacchi” su Safari iOS */
-.row.marquee{
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
+  .reviews-marquee{ padding: 30px 0 80px; }
+  .reviews-head{ margin-bottom: 28px; }
+  .row.marquee{ gap: 12px; padding: 6px 0; }
 }
 </style>

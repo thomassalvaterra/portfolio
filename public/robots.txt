@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio-eta-vert-i9e452m5nk.vercel.app/sitemap.xml
+Sitemap: https://thomassalvaterra-portfolio.vercel.app/sitemap.xml

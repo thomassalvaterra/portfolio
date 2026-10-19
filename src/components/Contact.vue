@@ -68,7 +68,7 @@
     </div>
 
     <transition name="fade">
-      <div v-if="openCalendly" class="calendly-overlay" @click.self="openCalendly = false">
+      <div v-if="openCalendly" class="calendly-overlay" data-lenis-prevent @click.self="openCalendly = false">
         <div class="calendly-modal">
           <button class="close" @click="openCalendly = false">✕</button>
           <iframe

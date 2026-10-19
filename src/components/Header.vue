@@ -10,10 +10,10 @@
       <!-- Desktop menu (pillola centrale) -->
       <nav class="pill desktop-menu">
         <a href="#home" :class="{ active: active === 'home' }">Home</a>
-        <a href="#chi-sono" :class="{ active: active === 'chi-sono' }">About</a>
-        <a href="#servizi" :class="{ active: active === 'servizi' }">Services</a>
-        <a href="#progetti" :class="{ active: active === 'progetti' }">Projects</a>
-        <a href="#contatti" class="btn-dark pill-cta">Contact</a>
+        <a href="#chi-sono" :class="{ active: active === 'chi-sono' }">Chi sono</a>
+        <a href="#servizi" :class="{ active: active === 'servizi' }">Servizi</a>
+        <a href="#progetti" :class="{ active: active === 'progetti' }">Progetti</a>
+        <a href="#contatti" class="btn-dark pill-cta">Contatti</a>
       </nav>
 
       <div class="side desktop-menu">
@@ -35,10 +35,10 @@
     <transition name="menu">
       <div v-if="open" class="mobile-menu glass">
         <a href="#home" @click="close">Home</a>
-        <a href="#chi-sono" @click="close">About</a>
-        <a href="#servizi" @click="close">Services</a>
-        <a href="#progetti" @click="close">Projects</a>
-        <a href="#contatti" class="btn-dark" @click="close">Contact</a>
+        <a href="#chi-sono" @click="close">Chi sono</a>
+        <a href="#servizi" @click="close">Servizi</a>
+        <a href="#progetti" @click="close">Progetti</a>
+        <a href="#contatti" class="btn-dark" @click="close">Contatti</a>
       </div>
     </transition>
   </header>

@@ -9,7 +9,6 @@ const PUBLIC = new URL('../public/', import.meta.url).pathname.replace(/^\/([A-Z
 // cartella -> larghezza massima
 const targets = [
   { dir: 'project', width: 1600 },
-  { dir: 'work', width: 900 },
   { dir: 'brand', width: 360, trim: true },
   { dir: '.', width: 900, only: ['Thomas.png'] },
   { dir: '.', width: 256, only: ['logo.png'], out: 'logo-sm' }

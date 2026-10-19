@@ -1,18 +1,28 @@
 <template>
   <section id="servizi" class="services">
-    <div class="wrap">
-      <div v-reveal class="head">
+    <div class="wrap services-grid">
+      <div v-reveal class="head services-head">
         <span class="eyebrow">Servizi</span>
         <h2 class="section-title">
           Tutti i servizi che offro <span class="soft">per i miei clienti</span>
         </h2>
       </div>
 
-      <div class="cards">
-        <article v-for="(s, i) in services" :key="s.title" v-reveal="i * 120" class="card-wrap">
-          <div v-tilt="8" class="card glass">
-            <span class="num">0{{ i + 1 }}</span>
-            <div class="icon" v-html="s.icon"></div>
+      <!-- Card che restano agganciate e si impilano una sull'altra mentre si scorre -->
+      <div class="stack">
+        <article
+          v-for="(s, i) in services"
+          :key="s.title"
+          :ref="(el) => (stackEls[i] = el)"
+          class="stack-card"
+          :class="'tone-' + i"
+          :style="{ '--i': i }"
+        >
+          <div class="stack-inner">
+            <div class="stack-top">
+              <div class="icon" v-html="s.icon"></div>
+              <span class="num">0{{ i + 1 }} / 0{{ services.length }}</span>
+            </div>
             <h3>{{ s.title }}</h3>
             <p>{{ s.text }}</p>
           </div>
@@ -54,6 +64,39 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const stackEls = ref([])
+
+// mentre la card successiva sale, quella sotto si rimpicciolisce e si scurisce
+let ticking = false
+const onScroll = () => {
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    const els = stackEls.value
+    for (let i = 0; i < els.length - 1; i++) {
+      const cur = els[i]
+      const next = els[i + 1]
+      if (!cur || !next) continue
+      const curTop = cur.getBoundingClientRect().top
+      const nextTop = next.getBoundingClientRect().top
+      const h = cur.offsetHeight
+      const p = Math.min(Math.max(1 - (nextTop - curTop) / h, 0), 1)
+      cur.firstElementChild.style.transform = `scale(${(1 - p * 0.06).toFixed(4)}) translateY(${(-p * 10).toFixed(2)}px)`
+      cur.firstElementChild.style.filter = `brightness(${(1 - p * 0.12).toFixed(3)})`
+    }
+    ticking = false
+  })
+}
+
+onMounted(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
+
 const services = [
   {
     title: 'Design grafico',
@@ -115,45 +158,98 @@ const plans = [
   max-width: 18ch;
 }
 
-.cards{
+.services-grid{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 60px;
+  align-items: start;
 }
 
-.card{
-  height: 100%;
-  padding: 34px 30px 36px;
+.services-head{
+  position: sticky;
+  top: 140px;
+  text-align: left;
+  margin-bottom: 0;
 }
-.card:hover{ box-shadow: var(--shadow-lift); }
+.services-head .section-title{ margin-left: 0; }
+
+.stack{
+  display: grid;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+.stack-card{
+  position: sticky;
+  top: calc(130px + var(--i) * 26px);
+}
+
+.stack-inner{
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 38px;
+  border-radius: 30px;
+  border: 1px solid var(--line);
+  box-shadow: 0 -10px 40px -24px rgba(31,58,39,.35), var(--shadow-soft);
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+.tone-0 .stack-inner{ background: var(--panel-solid); }
+.tone-1 .stack-inner{ background: linear-gradient(160deg, #e4ecdc, #d3e2d0); }
+.tone-2 .stack-inner{
+  background:
+    radial-gradient(80% 60% at 100% 0%, rgba(143,191,154,.3), transparent 60%),
+    linear-gradient(160deg, #24432e, #16281b);
+  color: #eef2e6;
+  border-color: rgba(255,255,255,.08);
+}
+
+.stack-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .num{
-  position: absolute;
-  top: 26px;
-  right: 28px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
 }
+.tone-2 .num{ color: rgba(238,242,230,.6); }
 
 .icon{
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
   display: grid;
   place-items: center;
   color: #f4f1e6;
   background: linear-gradient(160deg, #3f7a52, #1f3a27);
   box-shadow: 0 14px 26px -12px rgba(31,58,39,.6), 0 1px 0 rgba(255,255,255,.25) inset;
-  transform: translateZ(30px);
 }
-.icon :deep(svg){ width: 26px; height: 26px; }
+.tone-2 .icon{
+  color: var(--forest);
+  background: linear-gradient(160deg, #f7f4ea, #d9e7d6);
+}
+.icon :deep(svg){ width: 28px; height: 28px; }
 
-.card h3{
-  margin: 26px 0 10px;
-  font-size: 24px;
+.stack-inner h3{
+  margin: auto 0 12px;
+  padding-top: 40px;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 400;
+  letter-spacing: -.04em;
   color: var(--forest);
 }
-.card p{ color: var(--muted); }
+.tone-2 h3{ color: #f4f1e6; }
+
+.stack-inner p{
+  color: var(--muted);
+  font-size: 17px;
+  max-width: 46ch;
+}
+.tone-2 p{ color: rgba(238,242,230,.72); }
 
 /* ---------- Pricing ---------- */
 .pricing{
@@ -261,8 +357,13 @@ const plans = [
 }
 
 @media (max-width: 1000px){
-  .cards,
   .pricing-grid{ grid-template-columns: 1fr; }
+  .services-grid{ grid-template-columns: 1fr; gap: 36px; }
+  .services-head{ position: static; text-align: center; }
+  .services-head .section-title{ margin-left: auto; }
+  .stack{ gap: 24px; }
+  .stack-card{ top: calc(90px + var(--i) * 18px); }
+  .stack-inner{ min-height: 280px; padding: 26px 24px; border-radius: 24px; }
   .head{ margin-bottom: 40px; }
   .services{ padding: 60px 0 80px; }
   .pricing{ padding: 20px 0 80px; }

@@ -8,53 +8,12 @@
       </p>
     </div>
 
-    <!-- Riga 1 -->
-<div class="track left">
-  <div class="row marquee">
-    <ReviewCard
-      v-for="(r, i) in reviewsA"
-      :key="'a-'+i"
-      :r="r"
-    />
-    <ReviewCard
-      v-for="(r, i) in reviewsA"
-      :key="'a-dup-'+i"
-      :r="r"
-    />
-  </div>
-</div>
-
-<!-- Riga 2 -->
-<div class="track right">
-  <div class="row marquee reverse slow">
-    <ReviewCard
-      v-for="(r, i) in reviewsB"
-      :key="'b-'+i"
-      :r="r"
-    />
-    <ReviewCard
-      v-for="(r, i) in reviewsB"
-      :key="'b-dup-'+i"
-      :r="r"
-    />
-  </div>
-</div>
-
-<!-- Riga 3 -->
-<div class="track left">
-  <div class="row marquee fast">
-    <ReviewCard
-      v-for="(r, i) in reviewsC"
-      :key="'c-'+i"
-      :r="r"
-    />
-    <ReviewCard
-      v-for="(r, i) in reviewsC"
-      :key="'c-dup-'+i"
-      :r="r"
-    />
-  </div>
-</div>
+    <!-- Due righe che scorrono in direzioni opposte (si fermano al passaggio del mouse) -->
+    <div v-for="(row, k) in rows" :key="k" class="track">
+      <div class="row marquee" :class="{ reverse: k === 1, slow: k === 1 }">
+        <ReviewCard v-for="(r, i) in [...row, ...row]" :key="k + '-' + i" :r="r" />
+      </div>
+    </div>
   </section>
 </template>
 
@@ -129,6 +88,12 @@ const reviewsC = [
     text: 'Il sito precedente non rispecchiava la qualità dei miei servizi. Thomas ha ripensato tutta l’esperienza, rendendo la navigazione più fluida e moderna. Abbiamo lavorato insieme anche sulla presentazione dei contenuti e ora il sito è finalmente all’altezza del brand.',
   }
 ]
+
+// 12 recensioni divise su due righe
+const rows = [
+  [...reviewsA, ...reviewsC.slice(0, 2)],
+  [...reviewsB, ...reviewsC.slice(2)]
+]
 </script>
 
 <style scoped>
@@ -162,7 +127,6 @@ const reviewsC = [
 }
 .row.reverse{ animation-direction: reverse; }
 .row.slow{ animation-duration: 80s; }
-.row.fast{ animation-duration: 46s; }
 
 /* pausa al passaggio del mouse per poter leggere */
 .track:hover .row.marquee{ animation-play-state: paused; }

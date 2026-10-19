@@ -81,8 +81,8 @@
         <path :d="ARCH_SHADE" fill="none" stroke="#2c4130" stroke-opacity=".45" stroke-width="14" />
 
         <g v-for="(c, i) in [...midLeft.canopy, ...midRight.canopy, ...bridgeMoss]" :key="'mc' + i">
-          <circle :cx="c.x" :cy="c.y" :r="c.r" :fill="c.fill" />
-          <circle :cx="c.x - c.r * 0.25" :cy="c.y - c.r * 0.3" :r="c.r * 0.55" :fill="c.hi" opacity=".55" />
+          <circle :cx="c.x" :cy="c.y + c.r * 0.18" :r="c.r" :fill="c.shade" />
+          <circle v-for="(l, j) in c.leaves" :key="j" :cx="l.x" :cy="l.y" :r="l.r" :fill="l.fill" />
         </g>
 
         <!-- due figure sul ponte -->
@@ -128,8 +128,8 @@
           <rect x="-100" y="0" width="1800" height="1100" fill="url(#shadeDown)" />
         </g>
         <g v-for="(c, i) in frontLeft.canopy" :key="'lc' + i">
-          <circle :cx="c.x" :cy="c.y" :r="c.r" :fill="c.fill" />
-          <circle :cx="c.x + c.r * 0.2" :cy="c.y - c.r * 0.32" :r="c.r * 0.55" :fill="c.hi" opacity=".6" />
+          <circle :cx="c.x" :cy="c.y + c.r * 0.18" :r="c.r" :fill="c.shade" />
+          <circle v-for="(l, j) in c.leaves" :key="j" :cx="l.x" :cy="l.y" :r="l.r" :fill="l.fill" />
         </g>
       </svg>
     </div>
@@ -152,8 +152,8 @@
           <rect x="-100" y="0" width="1800" height="1100" fill="url(#shadeDown)" />
         </g>
         <g v-for="(c, i) in frontRight.canopy" :key="'rc' + i">
-          <circle :cx="c.x" :cy="c.y" :r="c.r" :fill="c.fill" />
-          <circle :cx="c.x - c.r * 0.2" :cy="c.y - c.r * 0.32" :r="c.r * 0.55" :fill="c.hi" opacity=".6" />
+          <circle :cx="c.x" :cy="c.y + c.r * 0.18" :r="c.r" :fill="c.shade" />
+          <circle v-for="(l, j) in c.leaves" :key="j" :cx="l.x" :cy="l.y" :r="l.r" :fill="l.fill" />
         </g>
       </svg>
     </div>
@@ -226,6 +226,26 @@ function smoothPath(points) {
   return d + ` L${last[0]} ${last[1]}`
 }
 
+// ogni chioma diventa un ciuffo: base in ombra + tante foglioline, più chiare in alto
+function clump(c, r, shade) {
+  const n = 6 + Math.floor(r() * 5)
+  const leaves = []
+  for (let k = 0; k < n; k++) {
+    const a = -Math.PI * (0.05 + r() * 0.9) // metà superiore
+    const d = c.r * (0.15 + r() * 0.6)
+    const lr = c.r * (0.28 + r() * 0.24)
+    const up = Math.sin(a) < -0.55
+    leaves.push({
+      x: f(c.x + Math.cos(a) * d),
+      y: f(c.y + Math.sin(a) * d * 0.8 + c.r * 0.1),
+      r: f(lr),
+      fill: up ? c.hi : c.fill
+    })
+  }
+  leaves.sort((p, q) => q.y - p.y)
+  return { ...c, shade, leaves }
+}
+
 function makeCliff(points, seed, { palette, highlights, rMin, rMax, step, canopyUntil, streaks = 0 }) {
   const r = rng(seed)
   const last = points[points.length - 1]
@@ -261,6 +281,8 @@ function makeCliff(points, seed, { palette, highlights, rMin, rMax, step, canopy
     }
   }
   canopy.sort((a, b) => a.y - b.y)
+  const shade = palette[0]
+  for (let i = 0; i < canopy.length; i++) canopy[i] = clump(canopy[i], r, shade)
 
   const xs = points.map((p) => p[0])
   const minX = Math.min(...xs)
@@ -291,25 +313,25 @@ const midHi = ['#a9c487', '#b8cf92', '#c3d59c']
 const frontLeft = makeCliff(
   [[-60, 290], [40, 270], [140, 300], [230, 350], [300, 410], [355, 480], [395, 550], [420, 630], [440, 720], [448, 1000]],
   3,
-  { palette: frontPalette, highlights: frontHi, rMin: 10, rMax: 26, step: 11, canopyUntil: 8, streaks: 30 }
+  { palette: frontPalette, highlights: frontHi, rMin: 13, rMax: 32, step: 15, canopyUntil: 8, streaks: 30 }
 )
 
 const frontRight = makeCliff(
   [[1660, 250], [1560, 240], [1460, 280], [1380, 335], [1310, 400], [1255, 475], [1215, 555], [1190, 640], [1172, 730], [1165, 1000]],
   11,
-  { palette: frontPalette, highlights: frontHi, rMin: 10, rMax: 26, step: 11, canopyUntil: 8, streaks: 30 }
+  { palette: frontPalette, highlights: frontHi, rMin: 13, rMax: 32, step: 15, canopyUntil: 8, streaks: 30 }
 )
 
 const midLeft = makeCliff(
   [[300, 540], [380, 515], [450, 530], [510, 575], [545, 630], [560, 700], [566, 1000]],
   5,
-  { palette: midPalette, highlights: midHi, rMin: 6, rMax: 14, step: 8, canopyUntil: 5 }
+  { palette: midPalette, highlights: midHi, rMin: 7, rMax: 16, step: 10, canopyUntil: 5 }
 )
 
 const midRight = makeCliff(
   [[1320, 500], [1230, 480], [1150, 505], [1090, 560], [1055, 630], [1040, 710], [1034, 1000]],
   9,
-  { palette: midPalette, highlights: midHi, rMin: 6, rMax: 14, step: 8, canopyUntil: 5 }
+  { palette: midPalette, highlights: midHi, rMin: 7, rMax: 16, step: 10, canopyUntil: 5 }
 )
 
 // ponte naturale: impalcato + arco
@@ -334,7 +356,7 @@ const bridgeMoss = (() => {
       hi: midHi[Math.floor(r() * midHi.length)]
     })
   }
-  return out
+  return out.map((c) => clump(c, r, midPalette[3]))
 })()
 
 const pollen = (() => {

@@ -15,7 +15,17 @@
             <span v-for="(w, i) in ['Ciao', 'sono', 'un']" :key="w" class="word" :style="{ '--d': `${120 + i * 90}ms` }">{{ w }}</span>
           </span>
           <span class="line-2">
-            <span class="typed">{{ currentWord }}</span><span class="cursor"></span>
+            <transition name="roll" mode="out-in" :duration="{ enter: 1000, leave: 520 }">
+              <span :key="wordIndex" class="roll-word" :aria-label="words[wordIndex]">
+                <span
+                  v-for="(ch, i) in words[wordIndex]"
+                  :key="i"
+                  class="ch"
+                  :style="{ '--i': i, color: shade(i, words[wordIndex].length) }"
+                  aria-hidden="true"
+                >{{ ch }}</span>
+              </span>
+            </transition>
           </span>
         </h1>
 
@@ -71,36 +81,15 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import HeroScene from './HeroScene.vue'
 
 const words = ['Developer', 'Frontend Dev', 'Freelancer']
-const currentWord = ref('Developer')
-let wordIndex = 0
-let charIndex = words[0].length
-let deleting = false
+const wordIndex = ref(0)
 let timer = null
 
-const typeSpeed = 90
-const deleteSpeed = 55
-const pauseAfterType = 1600
-
-const loopType = () => {
-  const full = words[wordIndex]
-
-  if (!deleting) {
-    currentWord.value = full.slice(0, charIndex++)
-    if (charIndex > full.length) {
-      deleting = true
-      timer = setTimeout(loopType, pauseAfterType)
-      return
-    }
-  } else {
-    currentWord.value = full.slice(0, charIndex--)
-    if (charIndex < 0) {
-      deleting = false
-      charIndex = 0
-      wordIndex = (wordIndex + 1) % words.length
-    }
-  }
-
-  timer = setTimeout(loopType, deleting ? deleteSpeed : typeSpeed)
+// sfumatura verde lettera per lettera (da #3f7a52 a #7fae8b)
+const from = [63, 122, 82]
+const to = [127, 174, 139]
+const shade = (i, len) => {
+  const t = len > 1 ? i / (len - 1) : 0
+  return `rgb(${from.map((c, k) => Math.round(c + (to[k] - c) * t)).join(',')})`
 }
 
 // il testo centrale sale e sfuma mentre si scorre
@@ -120,9 +109,13 @@ const onScroll = () => {
 }
 
 onMounted(() => {
-  // parte dopo l'intro, la parola iniziale è già scritta
-  deleting = true
-  timer = setTimeout(loopType, 2600)
+  // la parola cambia a rullo ogni 2,8s, dopo l'intro
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    timer = setTimeout(function next() {
+      wordIndex.value = (wordIndex.value + 1) % words.length
+      timer = setTimeout(next, 2800)
+    }, 3200)
+  }
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.addEventListener('scroll', onScroll, { passive: true })
   }
@@ -230,28 +223,40 @@ onUnmounted(() => {
 
 .line-2{
   display: block;
+  perspective: 600px;
   min-height: 1em;
   padding-bottom: .08em;
 }
 
-.typed{
-  background: linear-gradient(90deg, #3f7a52, #5f9670 55%, #7fae8b);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.roll-word{
+  display: inline-block;
+  white-space: pre;
 }
 
-.cursor{
+.ch{
   display: inline-block;
-  width: .06em;
-  height: .8em;
-  margin-left: .06em;
-  background: #5f9670;
-  border-radius: 2px;
-  vertical-align: -.04em;
-  animation: blink 1s steps(1) infinite;
+  transform-origin: 50% 100%;
 }
-@keyframes blink{ 50%{ opacity: 0; } }
+
+/* le lettere entrano ruotando dal basso, una dopo l'altra, ed escono verso l'alto */
+.roll-enter-active .ch{
+  transition: transform .7s var(--ease), opacity .7s ease, filter .7s ease;
+  transition-delay: calc(var(--i) * 28ms);
+}
+.roll-leave-active .ch{
+  transition: transform .4s cubic-bezier(.5,0,.75,0), opacity .4s ease, filter .4s ease;
+  transition-delay: calc(var(--i) * 12ms);
+}
+.roll-enter-from .ch{
+  opacity: 0;
+  transform: translateY(.45em) rotateX(-75deg);
+  filter: blur(6px);
+}
+.roll-leave-to .ch{
+  opacity: 0;
+  transform: translateY(-.35em) rotateX(60deg);
+  filter: blur(6px);
+}
 
 .sub{
   margin: 22px auto 0;

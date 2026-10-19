@@ -55,8 +55,8 @@
           <h3>Prenota subito una consulenza gratuita</h3>
           <p>🚀 Parlami della tua idea o esponi il tuo problema e vediamo come poterlo risolvere!</p>
           <a href="#contatti" class="btn-dark trust-cta">Prenota ora</a>
+          <div class="trust-meta">▸ Consulenza gratuita <span>30 min</span></div>
         </div>
-        <div class="trust-meta">▸ Consulenza gratuita <span>30 min</span></div>
       </div>
 
       <a href="#chi-sono" class="scroll-hint appear" style="--d: 1100ms" aria-label="Scorri">
@@ -171,9 +171,24 @@ onUnmounted(() => {
 
 /* ---------- Centro ---------- */
 .center{
+  position: relative;
+  isolation: isolate;
   grid-column: 1 / -1;
+  justify-self: center;
   text-align: center;
   will-change: transform, opacity;
+}
+
+/* alone crema: stacca il testo dal paesaggio quando la scena sale (schermi larghi) */
+.center::before{
+  content: '';
+  position: absolute;
+  inset: -12% -14% -22%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(250,244,228,.92), rgba(250,244,228,.7) 55%, rgba(250,244,228,0));
+  filter: blur(8px);
+  pointer-events: none;
 }
 
 .social-proof{
@@ -220,7 +235,7 @@ onUnmounted(() => {
 }
 
 .typed{
-  background: linear-gradient(90deg, #6c9c7a, #a6c8ad 70%, #b9d4bc);
+  background: linear-gradient(90deg, #3f7a52, #5f9670 55%, #7fae8b);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -231,7 +246,7 @@ onUnmounted(() => {
   width: .06em;
   height: .8em;
   margin-left: .06em;
-  background: #8fb59a;
+  background: #5f9670;
   border-radius: 2px;
   vertical-align: -.04em;
   animation: blink 1s steps(1) infinite;
@@ -243,17 +258,23 @@ onUnmounted(() => {
   max-width: 34ch;
   font-size: clamp(17px, 1.6vw, 21px);
   line-height: 1.45;
-  color: #6b766b;
+  color: #46534a;
   letter-spacing: -.01em;
 }
-.sub strong{ font-weight: 500; color: #3c4a3f; }
+.sub strong{ font-weight: 500; color: var(--forest); }
 
 /* ---------- Basso sinistra ---------- */
 .bottom-left{
   align-self: end;
-  max-width: 400px;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 24px;
   color: #eef2e6;
-  text-shadow: 0 1px 12px rgba(10,20,12,.45);
+  background: rgba(18,34,23,.55);
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 30px 60px -28px rgba(10,24,14,.6);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
 }
 
 .core{
@@ -315,8 +336,8 @@ onUnmounted(() => {
 .trust-card{
   padding: 22px;
   border-radius: 24px;
-  background: rgba(255,255,255,.42);
-  border: 1px solid rgba(255,255,255,.7);
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(255,255,255,.8);
   backdrop-filter: blur(22px) saturate(1.3);
   -webkit-backdrop-filter: blur(22px) saturate(1.3);
   box-shadow: 0 30px 60px -24px rgba(10,24,14,.55);
@@ -366,11 +387,10 @@ onUnmounted(() => {
 .trust-meta{
   margin-top: 12px;
   font-size: 13px;
-  color: #eef2e6;
-  text-shadow: 0 1px 10px rgba(10,20,12,.5);
-  padding-left: 6px;
+  text-align: center;
+  color: #46534a;
 }
-.trust-meta span{ opacity: .7; margin-left: 6px; }
+.trust-meta span{ opacity: .75; margin-left: 6px; }
 
 /* ---------- Scroll hint ---------- */
 .scroll-hint{
@@ -427,11 +447,6 @@ onUnmounted(() => {
     margin-top: 290px;
     max-width: none;
     padding: 22px;
-    border-radius: 24px;
-    background: rgba(20,36,24,.45);
-    border: 1px solid rgba(255,255,255,.18);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
   }
 
   .bottom-right{
@@ -440,11 +455,6 @@ onUnmounted(() => {
   }
 
   .trust-card{ background: rgba(255,255,255,.75); }
-
-  .trust-meta{
-    color: var(--muted);
-    text-shadow: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce){

@@ -10,12 +10,12 @@ const PUBLIC = new URL('../public/', import.meta.url).pathname.replace(/^\/([A-Z
 const targets = [
   { dir: 'project', width: 1600 },
   { dir: 'work', width: 900 },
-  { dir: 'brand', width: 360 },
+  { dir: 'brand', width: 360, trim: true },
   { dir: '.', width: 900, only: ['Thomas.png'] },
   { dir: '.', width: 256, only: ['logo.png'], out: 'logo-sm' }
 ]
 
-for (const { dir, width, only, out } of targets) {
+for (const { dir, width, only, out, trim } of targets) {
   const folder = join(PUBLIC, dir)
   const files = (await readdir(folder)).filter(
     (f) => /\.(png|jpe?g)$/i.test(f) && (!only || only.includes(f))
@@ -24,7 +24,10 @@ for (const { dir, width, only, out } of targets) {
   for (const file of files) {
     const name = out || parse(file).name
     const dest = join(folder, `${name}.webp`)
-    const info = await sharp(join(folder, file))
+    let img = sharp(join(folder, file))
+    // i loghi hanno molto margine vuoto: lo taglia, così hanno tutti la stessa scala
+    if (trim) img = sharp(await img.trim({ threshold: 40 }).toBuffer())
+    const info = await img
       .resize({ width, withoutEnlargement: true })
       .webp({ quality: 80 })
       .toFile(dest)

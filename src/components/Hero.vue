@@ -11,6 +11,7 @@
         </div>
 
         <h1 class="title">
+          <span class="sr-only">Thomas Salvaterra – Frontend Developer freelance. </span>
           <span class="line-1">
             <span v-for="(w, i) in ['Ciao', 'sono', 'un']" :key="w" class="word" :style="{ '--d': `${120 + i * 90}ms` }">{{ w }}</span>
           </span>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-eta-vert-i9e452m5nk.vercel.app/sitemap.xml

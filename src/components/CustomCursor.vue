@@ -1,9 +1,9 @@
 <template>
   <div v-if="enabled" class="cursor" aria-hidden="true">
-    <div ref="ring" class="c-ring" :class="{ hover, label: !!label, down }">
+    <div ref="ring" class="c-ring" :class="{ on: shown, hover, label: !!label, down }">
       <span v-if="label" class="text">{{ label }}</span>
     </div>
-    <div ref="dot" class="c-dot" :class="{ hidden: !!label }"></div>
+    <div ref="dot" class="c-dot" :class="{ on: shown, hidden: !!label }"></div>
   </div>
 </template>
 
@@ -20,6 +20,7 @@ const dot = ref(null)
 const hover = ref(false)
 const down = ref(false)
 const label = ref('')
+const shown = ref(false)
 
 let x = -100, y = -100, rx = -100, ry = -100
 let raf = 0
@@ -34,7 +35,7 @@ const onMove = (e) => {
     visible = true
     rx = x
     ry = y
-    document.documentElement.classList.add('has-cursor')
+    shown.value = true
   }
   const el = e.target.closest?.(INTERACTIVE)
   hover.value = !!el
@@ -43,7 +44,7 @@ const onMove = (e) => {
 
 const onLeave = () => {
   visible = false
-  document.documentElement.classList.remove('has-cursor')
+  shown.value = false
 }
 
 const onDown = () => (down.value = true)
@@ -90,8 +91,8 @@ onUnmounted(() => {
   will-change: transform;
   opacity: 0;
 }
-:global(html.has-cursor) .c-ring,
-:global(html.has-cursor) .c-dot{ opacity: 1; }
+.c-ring.on,
+.c-dot.on{ opacity: 1; }
 
 /* l'anello inverte i colori sotto di sé: si vede sia sul crema che sui pannelli scuri */
 .c-ring{
@@ -143,5 +144,5 @@ onUnmounted(() => {
   mix-blend-mode: difference;
   transition: opacity .2s ease;
 }
-:global(html.has-cursor) .c-dot.hidden{ opacity: 0; }
+.c-dot.on.hidden{ opacity: 0; }
 </style>

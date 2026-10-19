@@ -185,7 +185,7 @@ onUnmounted(() => {
 
 <style scoped>
 .showcase{
-  padding: 40px 0 110px;
+  padding: 40px 0 30px;
   overflow: hidden;
 }
 
@@ -374,7 +374,7 @@ onUnmounted(() => {
 
 /* ---------- Mobile ---------- */
 @media (max-width: 900px){
-  .showcase{ padding: 10px 0 70px; }
+  .showcase{ padding: 10px 0 20px; }
 
   .logos-track{
     mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);

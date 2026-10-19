@@ -126,7 +126,7 @@ const nextExperience = () => {
 
 <style scoped>
 .about{
-  padding: 120px 0 140px;
+  padding: 60px 0 140px;
 }
 
 .about-grid{
@@ -343,7 +343,7 @@ const nextExperience = () => {
 }
 
 @media (max-width: 900px){
-  .about{ padding: 80px 0; }
+  .about{ padding: 40px 0 80px; }
   .about-grid{
     grid-template-columns: 1fr;
     gap: 48px;
